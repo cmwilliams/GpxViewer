@@ -1,0 +1,55 @@
+﻿@model GpxViewer.ViewModels.TracksViewModel
+<div class="page-header">
+    <h1>Tracks</h1>
+</div>
+
+<dl class="dl-horizontal">
+    <dt><strong>@Html.LabelFor(m => m.Track.Name):</strong></dt>
+    <dd>@Model.Track.Name</dd>
+    <dt><strong>>@Html.LabelFor(m => m.Track.FileName):</strong></dt>
+    <dd>@Model.Track.FileName</dd>
+    <dt><strong>@Html.LabelFor(m => m.Track.FileContentType):</strong></dt>
+    <dd>@Model.Track.FileContentType</dd>
+    <dt><strong>@Html.LabelFor(m => m.Track.FileSize):</strong></dt>
+    <dd>@Model.Track.FileSize</dd>
+    <dt><strong>@Html.LabelFor(m => m.Track.FileUpdatedAt):</strong></dt>
+    <dd>@Model.Track.FileUpdatedAt</dd>
+</dl>
+
+<div class="form-actions">
+    @Html.ActionLink("Edit", "Edit", "Tracks", null, new { @class = "btn" })
+    @Html.ActionLink("Delete", "Delete", "Tracks", null, new { @class = "btn btn-danger" })
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Point No.</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Elevation</th>
+            <th>Description</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trackSegment in Model.TrackSegments)
+        {
+            @foreach (var point in trackSegment.Points)
+            {
+                <tr>
+                    <td>@point.PointId</td>
+                    <td>@point.Name></td>
+                    <td>@point.Latitude</td>
+                    <td>@point.Longitude</td>
+                    <td>@point.Elevation</td>
+                    <td>@point.Description</td>
+                    <td>@point.PointCreatedAt</td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
