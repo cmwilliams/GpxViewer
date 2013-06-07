@@ -100,7 +100,7 @@ namespace GpxViewer.Controllers
                         track.FileUpdatedAt = DateTime.Now;
 
                         track = ParseGpx(track, viewModel.GpxFile.InputStream);
-                        var path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/";
+                        var path = Server.MapPath("~/Uploads");
                         viewModel.GpxFile.SaveAs(Path.Combine(path, viewModel.GpxFile.FileName));
 
                         db.Tracks.Add(track);
