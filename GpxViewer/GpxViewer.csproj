@@ -258,6 +258,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\site.css" />
+    <None Include="Properties\PublishProfiles\gpxviewer - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\gpxviewer - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.0.1.intellisense.js" />
     <Content Include="Scripts\bootstrap-validation.js" />
     <Content Include="Scripts\bootstrap.js" />
