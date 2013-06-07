@@ -146,7 +146,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\Default1Controller.cs" />
     <Compile Include="Controllers\TracksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -290,17 +289,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Tracks\Show.cshtml" />
-    <Content Include="Views\Default1\Index.cshtml" />
-    <Content Include="Views\Default1\Details.cshtml" />
-    <Content Include="Views\Default1\Create.cshtml" />
-    <Content Include="Views\Default1\Edit.cshtml" />
-    <Content Include="Views\Default1\Delete.cshtml" />
     <Content Include="Views\Tracks\Index.cshtml" />
     <Content Include="Views\Tracks\Create.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SimpleMessage.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MessageBase.cshtml" />
     <Content Include="Views\Tracks\Details.cshtml" />
+    <Content Include="Views\Tracks\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

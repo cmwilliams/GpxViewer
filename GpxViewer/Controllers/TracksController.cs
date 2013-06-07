@@ -119,38 +119,7 @@ namespace GpxViewer.Controllers
             return View(viewModel);
         }
 
-        //
-        // GET: /Default1/Edit/5
-
-        public ActionResult Edit(int id = 0)
-        {
-            Track track = db.Tracks.Find(id);
-            if (track == null)
-            {
-                return HttpNotFound();
-            }
-            return View(track);
-        }
-
-        //
-        // POST: /Default1/Edit/5
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Track track)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(track).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(track);
-        }
-
-        //
-        // GET: /Default1/Delete/5
-
+      
         public ActionResult Delete(int id = 0)
         {
             Track track = db.Tracks.Find(id);
@@ -161,9 +130,7 @@ namespace GpxViewer.Controllers
             return View(track);
         }
 
-        //
-        // POST: /Default1/Delete/5
-
+      
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

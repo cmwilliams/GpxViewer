@@ -1,0 +1,49 @@
+﻿@model GpxViewer.Models.Track
+<div class="page-header">
+    <h1>Delete Track</h1>
+</div>
+
+<dl class="dl-horizontal">
+    <dt>
+        <strong>Name:</strong>
+    </dt>
+    <dd>
+        @Model.Name
+    </dd>
+    <dt>
+        <strong>File name:</strong>
+    </dt>
+    <dd>
+        @Model.FileName
+    </dd>
+    <dt>
+        <strong>Content type:</strong>
+    </dt>
+    <dd>
+        @Model.FileContentType
+    </dd>
+    <dt>
+        <strong>File size:</strong>
+    </dt>
+    <dd>
+        @Model.FileSize
+    </dd>
+    <dt>
+        <strong>File updated at:</strong>
+    </dt>
+    <dd>
+        @Model.FileUpdatedAt
+    </dd>
+</dl>
+
+<div class="form-actions">
+   @using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn" })
+    </p>
+}
+
+</div>
+
