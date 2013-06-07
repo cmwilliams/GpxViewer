@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using MvcFlash.Core.Extensions
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -8,11 +9,12 @@
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/bootstrap")
 </head>
-<body>
-    @RenderBody()
+    <body>
+        @Html.Flash()
+        @RenderBody()
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-</body>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+    </body>
 </html>

@@ -43,6 +43,9 @@
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
     </Reference>
+    <Reference Include="MvcFlash.Core">
+      <HintPath>..\packages\MvcFlash.Core.2.0.1\lib\net40\MvcFlash.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -148,6 +151,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\GpsLocation.cs" />
+    <Compile Include="Helpers\Gpx.cs" />
+    <Compile Include="Helpers\GpxReader.cs" />
+    <Compile Include="Helpers\GpxWriter.cs" />
     <Compile Include="Migrations\201306041550079_InitialMigration.cs" />
     <Compile Include="Migrations\201306041550079_InitialMigration.Designer.cs">
       <DependentUpon>201306041550079_InitialMigration.cs</DependentUpon>
@@ -156,12 +163,29 @@
     <Compile Include="Migrations\201306061854354_FileAttributesToTracks.Designer.cs">
       <DependentUpon>201306061854354_FileAttributesToTracks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201306071300380_MakeTrackNameRequired.cs" />
+    <Compile Include="Migrations\201306071300380_MakeTrackNameRequired.Designer.cs">
+      <DependentUpon>201306071300380_MakeTrackNameRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306071346513_UpdateToDateTracks.cs" />
+    <Compile Include="Migrations\201306071346513_UpdateToDateTracks.Designer.cs">
+      <DependentUpon>201306071346513_UpdateToDateTracks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306071421232_RemovePropertiesFromPoint.cs" />
+    <Compile Include="Migrations\201306071421232_RemovePropertiesFromPoint.Designer.cs">
+      <DependentUpon>201306071421232_RemovePropertiesFromPoint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306071425263_ChangeTrackNameRequired.cs" />
+    <Compile Include="Migrations\201306071425263_ChangeTrackNameRequired.Designer.cs">
+      <DependentUpon>201306071425263_ChangeTrackNameRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GpxViewerContext.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TrackSegment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\CreateTrackViewModel.cs" />
     <Compile Include="ViewModels\TracksViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -273,9 +297,14 @@
     <Content Include="Views\Default1\Edit.cshtml" />
     <Content Include="Views\Default1\Delete.cshtml" />
     <Content Include="Views\Tracks\Index.cshtml" />
+    <Content Include="Views\Tracks\Create.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SimpleMessage.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MessageBase.cshtml" />
+    <Content Include="Views\Tracks\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -286,6 +315,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306061854354_FileAttributesToTracks.resx">
       <DependentUpon>201306061854354_FileAttributesToTracks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306071300380_MakeTrackNameRequired.resx">
+      <DependentUpon>201306071300380_MakeTrackNameRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306071346513_UpdateToDateTracks.resx">
+      <DependentUpon>201306071346513_UpdateToDateTracks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306071421232_RemovePropertiesFromPoint.resx">
+      <DependentUpon>201306071421232_RemovePropertiesFromPoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306071425263_ChangeTrackNameRequired.resx">
+      <DependentUpon>201306071425263_ChangeTrackNameRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

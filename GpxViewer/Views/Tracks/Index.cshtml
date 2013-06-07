@@ -2,7 +2,7 @@
 
 <div class="page-header">
     <h1>Tracks</h1>
-  </div>
+</div>
 <table class="table table-striped">
     <caption></caption>
     <thead>
@@ -45,17 +45,8 @@
                     @Html.DisplayFor(modelItem => item.FileUpdatedAt)
                 </td>
                 <td>
-                    <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Edit", "Edit", new { id = item.TrackId })</li>
-                            <li>@Html.ActionLink("Details", "Details", new { id = item.TrackId })</li>
-                            <li class="divider"></li>
-                            <li>@Html.ActionLink("Delete", "Delete", new { id = item.TrackId })</li>
-                        </ul>
-                    </div>
+                    @Html.ActionLink("Details", "Details", "Tracks", new { id = item.TrackId }, new { @class = "btn" })
+                    @Html.ActionLink("Delete", "Delete", "Tracks", new { id = item.TrackId }, new { @class = "btn btn-danger" })
                 </td>
             </tr>
         }
@@ -64,7 +55,7 @@
 
 </table>
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn" })
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
 </p>
 
 

@@ -1,0 +1,73 @@
+﻿@model GpxViewer.Models.Track
+
+<div class="page-header">
+    <h1>Tracks</h1>
+</div>
+
+<dl class="dl-horizontal">
+    <dt>
+        <strong>Name:</strong>
+    </dt>
+    <dd>
+        @Model.Name
+    </dd>
+    <dt>
+        <strong>File name:</strong>
+    </dt>
+    <dd>
+        @Model.FileName
+    </dd>
+    <dt>
+        <strong>Content type:</strong>
+    </dt>
+    <dd>
+        @Model.FileContentType
+    </dd>
+    <dt>
+        <strong>File size:</strong>
+    </dt>
+    <dd>
+        @Model.FileSize
+    </dd>
+    <dt>
+        <strong>File updated at:</strong>
+    </dt>
+    <dd>
+        @Model.FileUpdatedAt
+    </dd>
+</dl>
+
+<div class="form-actions">
+     @Html.ActionLink("Back", "Index", "Tracks", null, new { @class = "btn" })
+    @Html.ActionLink("Delete", "Delete", "Tracks", new { id = Model.TrackId }, new { @class = "btn btn-danger" })
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Elevation</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trackSegment in Model.TrackSegments)
+        {
+            foreach (var point in trackSegment.Points)
+            {
+            <tr>
+                <td>@point.PointId</td>
+                <td>@point.Latitude</td>
+                <td>@point.Longitude</td>
+                <td>@point.Elevation</td>
+                <td>@point.PointCreatedAt</td>
+            </tr>
+            }
+        }
+
+    </tbody>
+</table>
+

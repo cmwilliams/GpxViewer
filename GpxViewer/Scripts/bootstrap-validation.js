@@ -41,7 +41,7 @@
         });
     });
 
-    $("input[type='password'], input[type='text']").blur(function () {
+    $("input[type='password'], input[type='text'], input[type='file']").blur(function () {
         if ($(this).hasClass('input-validation-error') == true || $(this).closest(".control-group").find('span.field-validation-error').length > 0) {
             $(this).addClass('error');
             $(this).closest(".control-group").addClass("error");

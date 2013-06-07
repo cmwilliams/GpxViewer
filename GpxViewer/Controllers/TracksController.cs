@@ -1,24 +1,25 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using Gpx;
 using GpxViewer.Models;
+using GpxViewer.ViewModels;
+using MvcFlash.Core;
+using MvcFlash.Core.Extensions;
 
 namespace GpxViewer.Controllers
 {
     public class TracksController : Controller
     {
-        private GpxViewerContext db = new GpxViewerContext();
-
-        //
-        // GET: /Default1/
+        private readonly GpxViewerContext db = new GpxViewerContext();
 
         public ActionResult Index()
         {
             return View(db.Tracks.ToList());
         }
-
-        //
-        // GET: /Default1/Details/5
 
         public ActionResult Details(int id = 0)
         {
@@ -30,29 +31,92 @@ namespace GpxViewer.Controllers
             return View(track);
         }
 
-        //
-        // GET: /Default1/Create
-
         public ActionResult Create()
         {
             return View();
         }
 
-        //
-        // POST: /Default1/Create
+        private static Track ParseGpx(Track track, Stream document)
+        {
+            try
+            {
+                using (var reader = new GpxReader(document))
+                {
+                    while (reader.Read())
+                    {
+                        switch (reader.ObjectType)
+                        {
+                            case GpxObjectType.Track:
+
+                                track.Name = reader.Track.Name;
+
+                                foreach (var segment in reader.Track.Segments)
+                                {
+                                    var trackSegment = new TrackSegment { Points = new Collection<Point>() };
+
+                                    foreach (var point in segment.TrackPoints)
+                                    {
+                                        trackSegment.Points.Add(new Point
+                                        {
+                                            Elevation = point.Elevation,
+                                            Latitude = point.Latitude,
+                                            Longitude = point.Longitude,
+                                            PointCreatedAt = point.Time
+                                        });
+                                    }
+
+                                    track.TrackSegments.Add(trackSegment);
+                                }
+                                break;
+                        }
+                    }
+                }
+
+                return track;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(string.Format("Unable to parse file. Error: {0}", exception.Message));
+            }
+           
+        }
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Track track)
+        public ActionResult Create(CreateTrackViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Tracks.Add(track);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    var track = new Track { TrackSegments = new Collection<TrackSegment>() };
+
+                    if (viewModel.GpxFile != null && viewModel.GpxFile.ContentLength > 0)
+                    {
+                        track.FileContentType = viewModel.GpxFile.ContentType;
+                        track.FileName = viewModel.GpxFile.FileName;
+                        track.FileSize = viewModel.GpxFile.ContentLength;
+                        track.FileUpdatedAt = DateTime.Now;
+
+                        track = ParseGpx(track, viewModel.GpxFile.InputStream);
+                        var path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/";
+                        viewModel.GpxFile.SaveAs(Path.Combine(path, viewModel.GpxFile.FileName));
+
+                        db.Tracks.Add(track);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }             
+                }
+                catch (Exception exception)
+                {
+                    Flash.Instance.Error("", string.Format("The following error occurred: {0}", exception.Message));
+                    return View(viewModel);
+                }
+            
             }
 
-            return View(track);
+            return View(viewModel);
         }
 
         //
