@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<GpxViewer.Models.Track>
 
 <div class="page-header">
-    <h1>Tracks</h1>
+    <h1>GPX Viewer</h1>
 </div>
+<p>
+    @Html.ActionLink("Upload GPX File", "Create", null, new { @class = "btn btn-primary" })
+</p>
 <table class="table table-striped">
     <caption></caption>
     <thead>
@@ -55,7 +58,7 @@
 
 </table>
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Upload GPX File", "Create", null, new { @class = "btn btn-primary" })
 </p>
 
 

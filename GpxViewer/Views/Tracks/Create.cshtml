@@ -3,7 +3,7 @@
 @using (Html.BeginForm("Create", "Tracks", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
     <div class="page-header">
-        <h1>New Track</h1>
+        <h1>Upload GPX File</h1>
     </div>
     @Html.AntiForgeryToken()
     @*<div class="control-group">
@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="form-actions">
-        <input type="submit" value="Create Track" class="btn btn-primary" />
+        <input type="submit" value="Upload" class="btn btn-primary" />
         @Html.ActionLink("Cancel", "Index", "Tracks", null, new { @class = "btn" })
 
     </div>
