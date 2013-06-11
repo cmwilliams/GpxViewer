@@ -809,11 +809,7 @@ h4 small {
   border-bottom: 1px solid #eeeeee;
 }
 
-.color {
-    background-color: #3cb9c6;
-    color: white;
-    padding: 10px;
-}
+.color{background-color: #3cb9c6;color: white;padding: 10px;}
 
 
 ul,
