@@ -110,12 +110,10 @@ namespace GpxViewer.Controllers
                         track.FileUpdatedAt = DateTime.Now;
 
                         track = ParseGpx(track, viewModel.GpxFile.InputStream);
-                        var path = Server.MapPath("~/Uploads");
-                        viewModel.GpxFile.SaveAs(Path.Combine(path, viewModel.GpxFile.FileName));
 
                         _db.Tracks.Add(track);
                         _db.SaveChanges();
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Details", new {@id = track.TrackId});
                     }             
                 }
                 catch (Exception exception)
