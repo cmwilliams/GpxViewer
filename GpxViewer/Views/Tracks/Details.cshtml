@@ -7,12 +7,16 @@
 <div class="row">
     <div class="span6">
         <dl class="dl-horizontal">
-            <dt>
-                <strong>Name:</strong>
-            </dt>
-            <dd>
-                @Model.Track.Name
-            </dd>
+            @if (!string.IsNullOrEmpty(Model.Track.Description))
+            {
+                <dt>
+                    <strong>Description:</strong>
+                </dt>
+                <dd>
+                    @Model.Track.Description
+                </dd>
+                <br/>
+            }
             <dt>
                 <strong>File name:</strong>
             </dt>

@@ -9,6 +9,7 @@ namespace GpxViewer.Models
         public int TrackId { get; set; }
        
         public string Name { get; set; }
+        public string Description { get; set; }
         [Display(Name = "File Name")]
         public string FileName { get; set; }
          [Display(Name = "Content Type")]

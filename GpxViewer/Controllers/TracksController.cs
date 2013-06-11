@@ -24,26 +24,8 @@ namespace GpxViewer.Controllers
             return View(_db.Tracks.ToList());
         }
 
-
-        private double CalculateDistance(double latitude1, double longitude1, double latitude2, double longitude2)
-        {
-            double e = (3.1415926538 * latitude1 / 180);
-            double f = (3.1415926538 * longitude1 / 180);
-            double g = (3.1415926538 * latitude2 / 180);
-            double h = (3.1415926538 * longitude2 / 180);
-            double i = (Math.Cos(e) * Math.Cos(g) * Math.Cos(f) * Math.Cos(h) + Math.Cos(e) * Math.Sin(f) * Math.Cos(g) * Math.Sin(h) + Math.Sin(e) * Math.Sin(g));
-            double j = (Math.Acos(i));
-            double k = (3956.0 * j);
-
-            return k;
-        }
-
-     
-
         public ActionResult Details(int id = 0)
         {
-          
-
             var track = _db.Tracks.Find(id);
             if (track == null)
             {
@@ -81,23 +63,26 @@ namespace GpxViewer.Controllers
                     {
                         switch (reader.ObjectType)
                         {
+                           
+
                             case GpxObjectType.Track:
 
                                 track.Name = reader.Track.Name;
+                                track.Description = reader.Track.Description;
 
                                 foreach (var segment in reader.Track.Segments)
                                 {
-                                    var trackSegment = new TrackSegment { Points = new Collection<Point>() };
+                                    var trackSegment = new TrackSegment {Points = new Collection<Point>()};
 
                                     foreach (var point in segment.TrackPoints)
                                     {
                                         trackSegment.Points.Add(new Point
-                                        {
-                                            Elevation = point.Elevation,
-                                            Latitude = point.Latitude,
-                                            Longitude = point.Longitude,
-                                            PointCreatedAt = point.Time
-                                        });
+                                                                    {
+                                                                        Elevation = point.Elevation,
+                                                                        Latitude = point.Latitude,
+                                                                        Longitude = point.Longitude,
+                                                                        PointCreatedAt = point.Time
+                                                                    });
                                     }
 
                                     track.TrackSegments.Add(trackSegment);

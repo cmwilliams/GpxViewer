@@ -190,6 +190,10 @@
     <Compile Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.Designer.cs">
       <DependentUpon>201306111905266_ChangeFloatToDoubleForCoordinates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201306112029259_AddDescriptionToTrack.cs" />
+    <Compile Include="Migrations\201306112029259_AddDescriptionToTrack.Designer.cs">
+      <DependentUpon>201306112029259_AddDescriptionToTrack.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ElevationProfile.cs" />
     <Compile Include="Models\GpxViewerContext.cs" />
@@ -347,6 +351,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.resx">
       <DependentUpon>201306111905266_ChangeFloatToDoubleForCoordinates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306112029259_AddDescriptionToTrack.resx">
+      <DependentUpon>201306112029259_AddDescriptionToTrack.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
