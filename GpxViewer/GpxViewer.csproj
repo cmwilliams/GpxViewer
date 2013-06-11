@@ -53,6 +53,9 @@
     <Reference Include="Polylines">
       <HintPath>..\packages\Polylines.1.0.0\lib\Polylines.dll</HintPath>
     </Reference>
+    <Reference Include="Spatial4n.Core">
+      <HintPath>..\packages\Spatial4n.Core.0.3\lib\net40\Spatial4n.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -179,7 +182,16 @@
     <Compile Include="Migrations\201306071425263_ChangeTrackNameRequired.Designer.cs">
       <DependentUpon>201306071425263_ChangeTrackNameRequired.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201306111846237_ChangeDoubleToFloatForCoordinates.cs" />
+    <Compile Include="Migrations\201306111846237_ChangeDoubleToFloatForCoordinates.Designer.cs">
+      <DependentUpon>201306111846237_ChangeDoubleToFloatForCoordinates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.cs" />
+    <Compile Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.Designer.cs">
+      <DependentUpon>201306111905266_ChangeFloatToDoubleForCoordinates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ElevationProfile.cs" />
     <Compile Include="Models\GpxViewerContext.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\Track.cs" />
@@ -329,6 +341,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306071425263_ChangeTrackNameRequired.resx">
       <DependentUpon>201306071425263_ChangeTrackNameRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306111846237_ChangeDoubleToFloatForCoordinates.resx">
+      <DependentUpon>201306111846237_ChangeDoubleToFloatForCoordinates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.resx">
+      <DependentUpon>201306111905266_ChangeFloatToDoubleForCoordinates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

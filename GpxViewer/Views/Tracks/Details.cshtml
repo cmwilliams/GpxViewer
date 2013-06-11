@@ -38,6 +38,47 @@
                 @Model.Track.FileUpdatedAt
             </dd>
         </dl>
+        @if (Model.Distance > 0)
+        {
+            <br/>
+            <dl class="dl-horizontal">
+                <dt>
+                    <strong>Distance:</strong>
+                </dt>
+                <dd>
+                    @Model.Distance miles
+                </dd>
+            </dl>
+        }
+        @if (Model.ElevationProfile != null)
+        {
+            <dl class="dl-horizontal">
+                <dt>
+                    <strong>Elevation Gain:</strong>
+                </dt>
+                <dd>
+                    @Model.ElevationProfile.Gain ft
+                </dd>
+                  <dt>
+                    <strong>Elevation Loss:</strong>
+                </dt>
+                <dd>
+                    @Model.ElevationProfile.Loss ft
+                </dd>
+                  <dt>
+                    <strong>Min Elevation:</strong>
+                </dt>
+                <dd>
+                    @Model.ElevationProfile.MinElevation ft
+                </dd>
+                  <dt>
+                    <strong>Max Elevation:</strong>
+                </dt>
+                <dd>
+                    @Model.ElevationProfile.MaxElevation ft
+                </dd>
+            </dl>
+        }
         <div class="form-actions">
             @Html.ActionLink("Back", "Index", "Tracks", null, new { @class = "btn" })
            @* @Html.ActionLink("Delete", "Delete", "Tracks", new { id = Model.Track.TrackId }, new { @class = "btn btn-danger" })*@

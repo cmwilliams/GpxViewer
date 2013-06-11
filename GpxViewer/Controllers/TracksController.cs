@@ -9,20 +9,41 @@ using GpxViewer.Models;
 using GpxViewer.ViewModels;
 using MvcFlash.Core;
 using MvcFlash.Core.Extensions;
+using Spatial4n.Core;
+using Spatial4n.Core.Context;
 
 namespace GpxViewer.Controllers
 {
     public class TracksController : Controller
     {
         private readonly GpxViewerContext _db = new GpxViewerContext();
+        private SpatialContext geo = SpatialContext.GEO;
 
         public ActionResult Index()
         {
             return View(_db.Tracks.ToList());
         }
 
+
+        private double CalculateDistance(double latitude1, double longitude1, double latitude2, double longitude2)
+        {
+            double e = (3.1415926538 * latitude1 / 180);
+            double f = (3.1415926538 * longitude1 / 180);
+            double g = (3.1415926538 * latitude2 / 180);
+            double h = (3.1415926538 * longitude2 / 180);
+            double i = (Math.Cos(e) * Math.Cos(g) * Math.Cos(f) * Math.Cos(h) + Math.Cos(e) * Math.Sin(f) * Math.Cos(g) * Math.Sin(h) + Math.Sin(e) * Math.Sin(g));
+            double j = (Math.Acos(i));
+            double k = (3956.0 * j);
+
+            return k;
+        }
+
+     
+
         public ActionResult Details(int id = 0)
         {
+          
+
             var track = _db.Tracks.Find(id);
             if (track == null)
             {
@@ -31,11 +52,15 @@ namespace GpxViewer.Controllers
 
             var trackSegment = _db.TrackSegments.SingleOrDefault(s => s.TrackId == track.TrackId);
             var polyline = trackSegment == null ? string.Empty : trackSegment.Points.GetPolyline();
+            var distance = trackSegment == null ? 0 : trackSegment.Points.GetDistance();
+            var elevationProfile = trackSegment.Points.GetElevation();
 
             var viewModel = new TrackDetailViewModel
                                 {
                                     Track = track,
-                                    Polyline = polyline
+                                    Polyline = polyline,
+                                    Distance =  distance,
+                                    ElevationProfile = elevationProfile
                                 };
 
             return View(viewModel);
