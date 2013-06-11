@@ -1,10 +1,10 @@
 ﻿@model GpxViewer.ViewModels.TrackDetailViewModel
 
-<div class="page-header">
+<div class="page-header color">
     <h1>@Model.Track.Name</h1>
 </div>
 
-<div class="row">
+<div class="row-fluid">
     <div class="span6">
         <dl class="dl-horizontal">
             @if (!string.IsNullOrEmpty(Model.Track.Description))
@@ -15,7 +15,7 @@
                 <dd>
                     @Model.Track.Description
                 </dd>
-                <br/>
+                <br />
             }
             <dt>
                 <strong>File name:</strong>
@@ -44,7 +44,7 @@
         </dl>
         @if (Model.Distance > 0)
         {
-            <br/>
+            <br />
             <dl class="dl-horizontal">
                 <dt>
                     <strong>Distance:</strong>
@@ -63,19 +63,19 @@
                 <dd>
                     @Model.ElevationProfile.Gain ft
                 </dd>
-                  <dt>
+                <dt>
                     <strong>Elevation Loss:</strong>
                 </dt>
                 <dd>
                     @Model.ElevationProfile.Loss ft
                 </dd>
-                  <dt>
+                <dt>
                     <strong>Min Elevation:</strong>
                 </dt>
                 <dd>
                     @Model.ElevationProfile.MinElevation ft
                 </dd>
-                  <dt>
+                <dt>
                     <strong>Max Elevation:</strong>
                 </dt>
                 <dd>
@@ -85,12 +85,12 @@
         }
         <div class="form-actions">
             @Html.ActionLink("Back", "Index", "Tracks", null, new { @class = "btn" })
-           @* @Html.ActionLink("Delete", "Delete", "Tracks", new { id = Model.Track.TrackId }, new { @class = "btn btn-danger" })*@
+            @* @Html.ActionLink("Delete", "Delete", "Tracks", new { id = Model.Track.TrackId }, new { @class = "btn btn-danger" })*@
         </div>
     </div>
-    <div class="span6">
-        <div id="map_canvas" style="height: 500px"></div>
-    </div>
+<div class="span6">
+    <div id="map_canvas" style="height: 500px;"></div>
+</div>
 </div>
 
 
@@ -131,7 +131,7 @@
         $(document).ready(function () {
             var gmCenter = new google.maps.LatLng(33.7489, -84.3881);
             var gmMapType = google.maps.MapTypeId.ROADMAP;
-            var mapOptions = { center: gmCenter, zoom: 8, mapTypeId: gmMapType };
+            var mapOptions = { center: gmCenter, zoom: 3, mapTypeId: gmMapType };
             map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
             displayOnMap();
         });
@@ -142,8 +142,9 @@
             var trackPath = new google.maps.Polyline(pathOptions);
             trackPath.setMap(map);
             map.fitBounds(calcBounds(trackPath));
+           
         }
-        
+
         function calcBounds(trackPath) {
             var b = new google.maps.LatLngBounds();
             var gmPath = trackPath.getPath();
@@ -154,8 +155,8 @@
             b.extend(gmPath.getAt(i[2]));
             return b;
         }
-        
-       
+
+
 
     </script>
 }

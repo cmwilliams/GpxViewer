@@ -34,7 +34,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.ActionLink(item.Name, "Details", "Tracks", new { id = item.TrackId }, null)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FileName)
