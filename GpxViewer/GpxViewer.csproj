@@ -154,6 +154,7 @@
     <Compile Include="Helpers\Gpx.cs" />
     <Compile Include="Helpers\GpxReader.cs" />
     <Compile Include="Helpers\GpxWriter.cs" />
+    <Compile Include="Helpers\LocationHelper.cs" />
     <Compile Include="Migrations\201306041550079_InitialMigration.cs" />
     <Compile Include="Migrations\201306041550079_InitialMigration.Designer.cs">
       <DependentUpon>201306041550079_InitialMigration.cs</DependentUpon>
@@ -185,6 +186,7 @@
     <Compile Include="Models\TrackSegment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CreateTrackViewModel.cs" />
+    <Compile Include="ViewModels\TrackDetailViewModel.cs" />
     <Compile Include="ViewModels\TracksViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

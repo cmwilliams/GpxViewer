@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Gpx;
+using GpxViewer.Helpers;
 using GpxViewer.Models;
 using GpxViewer.ViewModels;
 using MvcFlash.Core;
@@ -14,21 +14,31 @@ namespace GpxViewer.Controllers
 {
     public class TracksController : Controller
     {
-        private readonly GpxViewerContext db = new GpxViewerContext();
+        private readonly GpxViewerContext _db = new GpxViewerContext();
 
         public ActionResult Index()
         {
-            return View(db.Tracks.ToList());
+            return View(_db.Tracks.ToList());
         }
 
         public ActionResult Details(int id = 0)
         {
-            Track track = db.Tracks.Find(id);
+            var track = _db.Tracks.Find(id);
             if (track == null)
             {
                 return HttpNotFound();
             }
-            return View(track);
+
+            var trackSegment = _db.TrackSegments.SingleOrDefault(s => s.TrackId == track.TrackId);
+            var polyline = trackSegment == null ? string.Empty : trackSegment.Points.GetPolyline();
+
+            var viewModel = new TrackDetailViewModel
+                                {
+                                    Track = track,
+                                    Polyline = polyline
+                                };
+
+            return View(viewModel);
         }
 
         public ActionResult Create()
@@ -103,8 +113,8 @@ namespace GpxViewer.Controllers
                         var path = Server.MapPath("~/Uploads");
                         viewModel.GpxFile.SaveAs(Path.Combine(path, viewModel.GpxFile.FileName));
 
-                        db.Tracks.Add(track);
-                        db.SaveChanges();
+                        _db.Tracks.Add(track);
+                        _db.SaveChanges();
                         return RedirectToAction("Index");
                     }             
                 }
@@ -122,7 +132,7 @@ namespace GpxViewer.Controllers
       
         public ActionResult Delete(int id = 0)
         {
-            Track track = db.Tracks.Find(id);
+            Track track = _db.Tracks.Find(id);
             if (track == null)
             {
                 return HttpNotFound();
@@ -135,15 +145,15 @@ namespace GpxViewer.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Track track = db.Tracks.Find(id);
-            db.Tracks.Remove(track);
-            db.SaveChanges();
+            Track track = _db.Tracks.Find(id);
+            _db.Tracks.Remove(track);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            _db.Dispose();
             base.Dispose(disposing);
         }
     }

@@ -1,47 +1,56 @@
-﻿@model GpxViewer.Models.Track
+﻿@model GpxViewer.ViewModels.TrackDetailViewModel
 
 <div class="page-header">
     <h1>Tracks</h1>
 </div>
 
-<dl class="dl-horizontal">
-    <dt>
-        <strong>Name:</strong>
-    </dt>
-    <dd>
-        @Model.Name
-    </dd>
-    <dt>
-        <strong>File name:</strong>
-    </dt>
-    <dd>
-        @Model.FileName
-    </dd>
-    <dt>
-        <strong>Content type:</strong>
-    </dt>
-    <dd>
-        @Model.FileContentType
-    </dd>
-    <dt>
-        <strong>File size:</strong>
-    </dt>
-    <dd>
-        @Model.FileSize
-    </dd>
-    <dt>
-        <strong>File updated at:</strong>
-    </dt>
-    <dd>
-        @Model.FileUpdatedAt
-    </dd>
-</dl>
-
-<div class="form-actions">
-     @Html.ActionLink("Back", "Index", "Tracks", null, new { @class = "btn" })
-    @Html.ActionLink("Delete", "Delete", "Tracks", new { id = Model.TrackId }, new { @class = "btn btn-danger" })
+<div class="row">
+    <div class="span6">
+        <dl class="dl-horizontal">
+            <dt>
+                <strong>Name:</strong>
+            </dt>
+            <dd>
+                @Model.Track.Name
+            </dd>
+            <dt>
+                <strong>File name:</strong>
+            </dt>
+            <dd>
+                @Model.Track.FileName
+            </dd>
+            <dt>
+                <strong>Content type:</strong>
+            </dt>
+            <dd>
+                @Model.Track.FileContentType
+            </dd>
+            <dt>
+                <strong>File size:</strong>
+            </dt>
+            <dd>
+                @Model.Track.FileSize
+            </dd>
+            <dt>
+                <strong>File updated at:</strong>
+            </dt>
+            <dd>
+                @Model.Track.FileUpdatedAt
+            </dd>
+        </dl>
+        <div class="form-actions">
+            @Html.ActionLink("Back", "Index", "Tracks", null, new { @class = "btn" })
+            @Html.ActionLink("Delete", "Delete", "Tracks", new { id = Model.Track.TrackId }, new { @class = "btn btn-danger" })
+        </div>
+    </div>
+    <div class="span6">
+        <div id="map_canvas" style="height: 500px"></div>
+    </div>
 </div>
 
+
+
+<h2>Points</h2>
 
 <table class="table table-striped">
     <thead>
@@ -54,10 +63,8 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var trackSegment in Model.TrackSegments)
+        @foreach (var point in Model.Track.TrackSegments.SelectMany(trackSegment => trackSegment.Points))
         {
-            foreach (var point in trackSegment.Points)
-            {
             <tr>
                 <td>@point.PointId</td>
                 <td>@point.Latitude</td>
@@ -65,9 +72,45 @@
                 <td>@point.Elevation</td>
                 <td>@point.PointCreatedAt</td>
             </tr>
-            }
         }
 
     </tbody>
 </table>
 
+@section scripts
+{
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBHyd80Vb2I1rUaqH5cZb3lRxy8thve_GM&libraries=geometry&sensor=false"></script>
+    <script type="text/javascript">
+        var map;
+
+        $(document).ready(function () {
+            var gmCenter = new google.maps.LatLng(33.7489, -84.3881);
+            var gmMapType = google.maps.MapTypeId.ROADMAP;
+            var mapOptions = { center: gmCenter, zoom: 8, mapTypeId: gmMapType };
+            map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+            displayOnMap();
+        });
+
+        function displayOnMap() {
+            var decodedPath = google.maps.geometry.encoding.decodePath('@Model.Polyline');
+            var pathOptions = { path: decodedPath, strokeColor: "#FF0000", strokeOpacity: 0.5, strokeWeight: 5 };
+            var trackPath = new google.maps.Polyline(pathOptions);
+            trackPath.setMap(map);
+            map.fitBounds(calcBounds(trackPath));
+        }
+        
+        function calcBounds(trackPath) {
+            var b = new google.maps.LatLngBounds();
+            var gmPath = trackPath.getPath();
+            var pathLength = gmPath.getLength();
+            var i = [0, (pathLength / 3).toFixed(0), (pathLength / 3).toFixed(0) * 2];
+            b.extend(gmPath.getAt(i[0]));
+            b.extend(gmPath.getAt(i[1]));
+            b.extend(gmPath.getAt(i[2]));
+            return b;
+        }
+        
+       
+
+    </script>
+}
