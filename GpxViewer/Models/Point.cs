@@ -10,6 +10,8 @@ namespace GpxViewer.Models
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public double? Elevation { get; set; }
+        public int? Cadence { get; set; }
+        public int? HeartRate { get; set; }
         public DateTime? PointCreatedAt { get; set; }
     }
 }

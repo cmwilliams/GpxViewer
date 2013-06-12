@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using GpxViewer.Models;
 using Polylines;
 
@@ -103,7 +108,6 @@ namespace GpxViewer.Helpers
             return (Math.PI/180)*val;
         }
 
-       
         public static double GetDistance(this IEnumerable<Point> points)
         {
             double distance = 0;
@@ -118,6 +122,142 @@ namespace GpxViewer.Helpers
 
             }
             return Math.Round(distance,2);
+        }
+
+        public static double GetAvgCadence(this IEnumerable<Point> points)
+        {
+            var cadence = points.Where(p => p.Cadence != null && p.Cadence > 0).Average(p => p.Cadence);
+            if (cadence == null)
+            {
+                return 0;
+            }
+
+            return Math.Round(Convert.ToDouble(cadence),0);
+
+        }
+
+        public static double GetMaxCadence(this IEnumerable<Point> points)
+        {
+            var cadence = points.Where(p => p.Cadence != null && p.Cadence > 0).Max(p => p.Cadence);
+            if (cadence == null)
+            {
+                return 0;
+            }
+
+            return Math.Round(Convert.ToDouble(cadence), 0);
+
+        }
+
+
+
+        private static XDocument LoadFromStream(Stream stream)
+        {
+            using (var reader = XmlReader.Create(stream))
+            {
+                return XDocument.Load(reader);
+            }
+        }
+
+        private static XNamespace GetGpxNameSpace()
+        {
+            var gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
+            return gpx;
+        }
+
+        private static XNamespace GetGpxtpxNameSpace()
+        {
+            var gpxtpx = XNamespace.Get("http://www.garmin.com/xmlschemas/TrackPointExtension/v1");
+            return gpxtpx;
+        }
+
+        private static double Double(string value)
+        {
+            return double.Parse(value, CultureInfo.InvariantCulture);
+        }
+
+        private static string DefaultStringValue(XContainer element, XNamespace ns, string elementName)
+        {
+            var xElement = element.Element(ns + elementName);
+            return xElement != null ? xElement.Value : null;
+        }
+
+        private static double? DefaultDoubleValue(XContainer element, XNamespace ns, string elementName)
+        {
+            var xElement = element.Element(ns + elementName);
+            return xElement != null ? Convert.ToDouble(xElement.Value) : (double?)null;
+        }
+
+        private static int? DefaultIntValue(XContainer element, XNamespace ns, string elementName)
+        {
+            var xElement = element.Element(ns + elementName);
+            return xElement != null ? Convert.ToInt32(xElement.Value) : (int?)null;
+        }
+
+        private static DateTime? DefaultDateTimeValue(XContainer element, XNamespace ns, string elementName)
+        {
+            var xElement = element.Element(ns + elementName);
+            return xElement != null ? Convert.ToDateTime(xElement.Value) : (DateTime?)null;
+        }
+
+        public static Track ParseGpx(Track exitingTrack, Stream document)
+        {
+            var gpxDoc = LoadFromStream(document);
+            var gpx = GetGpxNameSpace();
+            var gpxtpx = GetGpxtpxNameSpace();
+
+            var tracks = from track in gpxDoc.Descendants(gpx + "trk")
+                         select new
+                         {
+                             Name = DefaultStringValue(track, gpx, "name"),
+                             Description = DefaultStringValue(track, gpx, "desc"),
+                             Segments = (from trkSegment in track.Descendants(gpx + "trkseg")
+                                         select new
+                                         {
+                                             TrackSegment = trkSegment,
+                                             Points = (from trackpoint in trkSegment.Descendants(gpx + "trkpt")
+                                                       select new
+                                                       {
+                                                           Lat = Double(trackpoint.Attribute("lat").Value),
+                                                           Lng = Double(trackpoint.Attribute("lon").Value),
+                                                           Ele = DefaultDoubleValue(trackpoint, gpx, "ele"),
+                                                           Time = DefaultDateTimeValue(trackpoint, gpx, "time"),
+                                                           Extensions = (
+                                                                  from ext in trackpoint.Descendants(gpx + "extensions").Descendants(gpxtpx + "TrackPointExtension")
+                                                                  select new
+                                                                  {
+                                                                      Cad = DefaultIntValue(ext, gpxtpx, "cad"),
+                                                                      Hr = DefaultIntValue(ext, gpxtpx, "hr"),
+                                                                  }).SingleOrDefault()
+                                                       })
+                                         })
+                         };
+
+            foreach (var trk in tracks)
+            {
+                exitingTrack.Name = trk.Name;
+                exitingTrack.Description = trk.Description;
+
+                foreach (var segment in trk.Segments)
+                {
+                    var trackSegment = new TrackSegment { Points = new Collection<Point>() };
+
+                    foreach (var point in segment.Points)
+                    {
+                        trackSegment.Points.Add(new Point
+                        {
+                            Elevation = point.Ele,
+                            Latitude = point.Lat,
+                            Longitude = point.Lng,
+                            PointCreatedAt = point.Time,
+                            Cadence = point.Extensions != null ? point.Extensions.Cad : null,
+                            HeartRate = point.Extensions != null ? point.Extensions.Hr : null
+                        });
+                    }
+
+                    exitingTrack.TrackSegments.Add(trackSegment);
+                }
+            }
+            return exitingTrack;
         }
     }
 }

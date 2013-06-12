@@ -42,18 +42,38 @@
                 @Model.Track.FileUpdatedAt
             </dd>
         </dl>
-        @if (Model.Distance > 0)
-        {
-            <br />
-            <dl class="dl-horizontal">
+        
+            
+        <dl class="dl-horizontal">
+            @if (Model.Distance > 0)
+            {
                 <dt>
                     <strong>Distance:</strong>
                 </dt>
                 <dd>
                     @Model.Distance miles
                 </dd>
-            </dl>
-        }
+            }
+            @if (Model.AvgCadence > 0) 
+            {
+                <dt>
+                    <strong>Avg Cadence:</strong>
+                </dt>
+                <dd>
+                    @Model.AvgCadence rpm
+                </dd>
+            }
+            @if (Model.MaxCadence > 0) 
+            {
+                <dt>
+                    <strong>Max Cadence:</strong>
+                </dt>
+                <dd>
+                    @Model.MaxCadence rpm
+                </dd>
+            }
+        </dl>
+        
         @if (Model.ElevationProfile != null)
         {
             <dl class="dl-horizontal">

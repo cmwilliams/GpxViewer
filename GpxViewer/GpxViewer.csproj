@@ -156,10 +156,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\GpsLocation.cs" />
-    <Compile Include="Helpers\Gpx.cs" />
-    <Compile Include="Helpers\GpxReader.cs" />
-    <Compile Include="Helpers\GpxWriter.cs" />
     <Compile Include="Helpers\LocationHelper.cs" />
     <Compile Include="Migrations\201306041550079_InitialMigration.cs" />
     <Compile Include="Migrations\201306041550079_InitialMigration.Designer.cs">
@@ -200,6 +196,14 @@
     <Compile Include="Migrations\201306121411496_MakePointDoublesNullable.cs" />
     <Compile Include="Migrations\201306121411496_MakePointDoublesNullable.Designer.cs">
       <DependentUpon>201306121411496_MakePointDoublesNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306121634526_AddCadenceToPoint.cs" />
+    <Compile Include="Migrations\201306121634526_AddCadenceToPoint.Designer.cs">
+      <DependentUpon>201306121634526_AddCadenceToPoint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306121813362_AddHeartRateToPoint.cs" />
+    <Compile Include="Migrations\201306121813362_AddHeartRateToPoint.Designer.cs">
+      <DependentUpon>201306121813362_AddHeartRateToPoint.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ElevationProfile.cs" />
@@ -364,6 +368,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306121411496_MakePointDoublesNullable.resx">
       <DependentUpon>201306121411496_MakePointDoublesNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306121634526_AddCadenceToPoint.resx">
+      <DependentUpon>201306121634526_AddCadenceToPoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306121813362_AddHeartRateToPoint.resx">
+      <DependentUpon>201306121813362_AddHeartRateToPoint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
