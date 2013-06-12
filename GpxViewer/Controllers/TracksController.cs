@@ -2,7 +2,10 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
+using System.Xml;
+using System.Xml.Linq;
 using Gpx;
 using GpxViewer.Helpers;
 using GpxViewer.Models;
@@ -38,12 +41,12 @@ namespace GpxViewer.Controllers
             var elevationProfile = trackSegment.Points.GetElevation();
 
             var viewModel = new TrackDetailViewModel
-                                {
-                                    Track = track,
-                                    Polyline = polyline,
-                                    Distance =  distance,
-                                    ElevationProfile = elevationProfile
-                                };
+                {
+                    Track = track,
+                    Polyline = polyline,
+                    Distance = distance,
+                    ElevationProfile = elevationProfile
+                };
 
             return View(viewModel);
         }
@@ -52,6 +55,66 @@ namespace GpxViewer.Controllers
         {
             return View();
         }
+
+        private static XDocument LoadFromStream(Stream stream)
+        {
+            using (var reader = XmlReader.Create(stream))
+            {
+                return XDocument.Load(reader);
+            }
+        }
+
+        private XNamespace GetGpxNameSpace()
+        {
+            XNamespace gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
+            return gpx;
+        } 
+
+        public string LoadGpxTracks(Track exitingTrack, Stream document)
+        {
+            var gpxDoc = LoadFromStream(document);
+            XNamespace gpx = GetGpxNameSpace();
+
+            var tracks = from track in gpxDoc.Descendants(gpx + "trk")
+                         let trackName = track.Element(gpx + "name")
+                         where trackName != null
+                         select new
+                             {
+                                 Name = trackName != null ? trackName.Value : null,
+                                 Segs = (from trackpoint in track.Descendants(gpx + "trkpt")
+                                         let elevation = trackpoint.Element(gpx + "ele")
+                                         where elevation != null
+                                         let time = trackpoint.Element(gpx + "time")
+                                         where time != null
+                                         select new
+                                             {
+                                                 Latitude = trackpoint.Attribute("lat").Value,
+                                                 Longitude = trackpoint.Attribute("lon").Value,
+                                                 Elevation = elevation != null ? elevation.Value : null,
+                                                 Time = time != null ? time.Value : null
+                                             })
+                             };
+
+            var sb = new StringBuilder();
+            foreach (var trk in tracks)
+            {
+                // Populate track data objects. 
+                foreach (var trkSeg in trk.Segs)
+                {
+                    // Populate detailed track segments 
+                    // in the object model here. 
+                    sb.Append(
+                        string.Format("Track:{0} - Latitude:{1} Longitude:{2} " +
+                                      "Elevation:{3} Date:{4}\n",
+                                      trk.Name, trkSeg.Latitude,
+                                      trkSeg.Longitude, trkSeg.Elevation,
+                                      trkSeg.Time));
+                }
+            }
+            return sb.ToString();
+        }
+
+
 
         private static Track ParseGpx(Track track, Stream document)
         {
