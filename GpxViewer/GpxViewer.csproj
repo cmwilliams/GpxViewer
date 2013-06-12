@@ -40,6 +40,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net45\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net45\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
     </Reference>
@@ -52,13 +58,11 @@
     <Reference Include="Polylines">
       <HintPath>..\packages\Polylines.1.0.0\lib\Polylines.dll</HintPath>
     </Reference>
-    <Reference Include="Spatial4n.Core">
-      <HintPath>..\packages\Spatial4n.Core.0.3\lib\net40\Spatial4n.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\packages\Microsoft.Net.Http.2.1.10\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
@@ -192,6 +196,10 @@
     <Compile Include="Migrations\201306112029259_AddDescriptionToTrack.cs" />
     <Compile Include="Migrations\201306112029259_AddDescriptionToTrack.Designer.cs">
       <DependentUpon>201306112029259_AddDescriptionToTrack.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306121411496_MakePointDoublesNullable.cs" />
+    <Compile Include="Migrations\201306121411496_MakePointDoublesNullable.Designer.cs">
+      <DependentUpon>201306121411496_MakePointDoublesNullable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ElevationProfile.cs" />
@@ -353,6 +361,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306112029259_AddDescriptionToTrack.resx">
       <DependentUpon>201306112029259_AddDescriptionToTrack.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306121411496_MakePointDoublesNullable.resx">
+      <DependentUpon>201306121411496_MakePointDoublesNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

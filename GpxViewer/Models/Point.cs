@@ -7,9 +7,9 @@ namespace GpxViewer.Models
         public int PointId { get; set; }
         public int TrackSegmentId { get; set; }
         public TrackSegment TrackSegment { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public double Elevation { get; set; }
-        public DateTime PointCreatedAt { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public DateTime? PointCreatedAt { get; set; }
     }
 }

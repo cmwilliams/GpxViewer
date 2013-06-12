@@ -10,7 +10,16 @@ namespace GpxViewer.Helpers
     {
         public static string GetPolyline(this IEnumerable<Point> points)
         {
-            var polylinePoints = points.OrderBy(p => p.PointCreatedAt).Select(point => new PolylineCoordinate {Latitude = point.Latitude, Longitude = point.Longitude}).ToList();
+            var polylinePoints =
+                points.OrderBy(p => p.PointCreatedAt)
+                      .Select(
+                          point =>
+                          new PolylineCoordinate
+                              {
+                                  Latitude = Convert.ToDouble(point.Latitude),
+                                  Longitude = Convert.ToDouble(point.Longitude)
+                              })
+                      .ToList();
 
             var polylineForPoints = Polyline.EncodePoints(polylinePoints);
 
@@ -36,7 +45,7 @@ namespace GpxViewer.Helpers
                 double loss = 0;
                 double last = 0;
 
-                foreach (var cur in enumerable.Select(point => (float) point.Elevation))
+                foreach (var cur in enumerable.Select(point => point.Elevation != null ? (float) point.Elevation : 0))
                 {
                     if (cur > max)
                     {
@@ -101,10 +110,11 @@ namespace GpxViewer.Helpers
             var segmentPoints = points.ToList();
             for (var i = 0; i < segmentPoints.Count - 1; i++)
             {
-                distance += Distance(segmentPoints[i].Latitude,
-                                              segmentPoints[i].Longitude,
-                                              segmentPoints[i + 1].Latitude,
-                                              segmentPoints[i + 1].Longitude);
+                distance += Distance(Convert.ToDouble(segmentPoints[i].Latitude),
+                                     Convert.ToDouble(segmentPoints[i].Longitude),
+                                     Convert.ToDouble(segmentPoints[i + 1].Latitude),
+                                     Convert.ToDouble(segmentPoints[i + 1].Longitude));
+
 
             }
             return Math.Round(distance,2);
