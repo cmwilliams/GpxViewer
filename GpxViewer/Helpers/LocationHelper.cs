@@ -36,7 +36,7 @@ namespace GpxViewer.Helpers
             return polylineForPoints;
         }
 
-        public static ElevationProfile GetElevation(this IEnumerable<Point> points)
+        public static ElevationProfile GetElevationProfile(this IEnumerable<Point> points)
         {
             ElevationProfile elevationProfile = null;
 
@@ -108,6 +108,29 @@ namespace GpxViewer.Helpers
             return (Math.PI/180)*val;
         }
 
+        public static double GetAvgMovingTime(this IEnumerable<Point> points)
+        {
+            double avgTime = 0;
+            var segmentPoints = points.ToList();
+            for (var i = 0; i < segmentPoints.Count - 1; i++)
+            {
+                var time1 = Convert.ToDateTime(segmentPoints[i].PointCreatedAt);
+                var time2 = Convert.ToDateTime(segmentPoints[i+1].PointCreatedAt);
+                if (time1 > time2)
+                {
+                    var diffResult = time1.Subtract(time2);
+                    avgTime += diffResult.Seconds;
+                }
+                else
+                {
+                    var diffResult = time2.Subtract(time1);
+                    avgTime += diffResult.Seconds;
+                }
+            }
+
+            return avgTime;
+        }
+
         public static double GetDistance(this IEnumerable<Point> points)
         {
             double distance = 0;
@@ -124,29 +147,80 @@ namespace GpxViewer.Helpers
             return Math.Round(distance,2);
         }
 
-        public static double GetAvgCadence(this IEnumerable<Point> points)
+        public static CadenceProfile GetCadenceProfile(this IEnumerable<Point> points)
         {
-            var cadence = points.Where(p => p.Cadence != null && p.Cadence > 0).Average(p => p.Cadence);
-            if (cadence == null)
+            var cadenceProfile = new CadenceProfile();
+
+            var enumerable = points as IList<Point> ?? points.ToList();
+            var avgCadence = enumerable.Where(p => p.Cadence != null && p.Cadence > 0).Average(p => p.Cadence);
+            var maxcadence = enumerable.Where(p => p.Cadence != null && p.Cadence > 0).Max(p => p.Cadence);
+            
+            if (avgCadence == null && maxcadence == null)
             {
-                return 0;
+                cadenceProfile = null;
             }
+            else
+            {
+                cadenceProfile.AvgCadence = avgCadence != null ? Math.Round(Convert.ToDouble(avgCadence),0) : 0;
+                cadenceProfile.MaxCadence = maxcadence != null ? Math.Round(Convert.ToDouble(maxcadence), 0) : 0;
+            }
+            
+           
 
-            return Math.Round(Convert.ToDouble(cadence),0);
-
+            return cadenceProfile;
         }
 
-        public static double GetMaxCadence(this IEnumerable<Point> points)
+
+        public static HeartRateProfile GetHeartRateProfile(this IEnumerable<Point> points)
         {
-            var cadence = points.Where(p => p.Cadence != null && p.Cadence > 0).Max(p => p.Cadence);
-            if (cadence == null)
+            var heartRateProfile = new HeartRateProfile();
+
+            var enumerable = points as IList<Point> ?? points.ToList();
+            var avgHr = enumerable.Where(p => p.HeartRate != null && p.HeartRate > 0).Average(p => p.HeartRate);
+            var maxHr = enumerable.Where(p => p.HeartRate != null && p.HeartRate > 0).Max(p => p.HeartRate);
+
+            if (avgHr == null && maxHr == null)
             {
-                return 0;
+                heartRateProfile = null;
+            }
+            else
+            {
+                heartRateProfile.AvgHeartRate = avgHr != null ? Math.Round(Convert.ToDouble(avgHr), 0) : 0;
+                heartRateProfile.MaxHeartRate = maxHr != null ? Math.Round(Convert.ToDouble(maxHr), 0) : 0;
             }
 
-            return Math.Round(Convert.ToDouble(cadence), 0);
 
+
+            return heartRateProfile;
         }
+
+        public static TimingProfile GetTimingProfile(this IEnumerable<Point> points)
+        {
+            var timingProfile = new TimingProfile();
+
+            var enumerable = points as IList<Point> ?? points.ToList();
+            
+            //Get Total Time
+            var minTime = enumerable.OrderBy(p => p.PointCreatedAt).Min(p => p.PointCreatedAt);
+            var maxTime = enumerable.OrderBy(p => p.PointCreatedAt).Max(p => p.PointCreatedAt);
+            if (minTime != null && maxTime != null)
+            {
+                var startTime = Convert.ToDateTime(minTime);
+                var endTime = Convert.ToDateTime(maxTime);
+                TimeSpan diffResult = endTime.Subtract(startTime);
+
+                timingProfile.Time = diffResult;
+            }
+            else
+            {
+                timingProfile = null;
+            }
+
+            return timingProfile;
+        }
+
+
+    
 
 
 

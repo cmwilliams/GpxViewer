@@ -30,9 +30,11 @@ namespace GpxViewer.Controllers
             var trackSegment = _db.TrackSegments.SingleOrDefault(s => s.TrackId == track.TrackId);
             var polyline = trackSegment == null ? string.Empty : trackSegment.Points.GetPolyline();
             var distance = trackSegment == null ? 0 : trackSegment.Points.GetDistance();
-            var elevationProfile = trackSegment == null ? null : trackSegment.Points.GetElevation();
-            var avgCadence = trackSegment == null ? 0 : trackSegment.Points.GetAvgCadence();
-            var maxCadence = trackSegment == null ? 0 : trackSegment.Points.GetMaxCadence();
+            var elevationProfile = trackSegment == null ? null : trackSegment.Points.GetElevationProfile();
+            var cadenceProfile = trackSegment == null ? null: trackSegment.Points.GetCadenceProfile();
+            var heartRateProfile = trackSegment == null ? null : trackSegment.Points.GetHeartRateProfile();
+            var timingProfile = trackSegment == null ? null : trackSegment.Points.GetTimingProfile();
+
 
             var viewModel = new TrackDetailViewModel
                 {
@@ -40,8 +42,9 @@ namespace GpxViewer.Controllers
                     Polyline = polyline,
                     Distance = distance,
                     ElevationProfile = elevationProfile,
-                    AvgCadence = avgCadence,
-                    MaxCadence = maxCadence
+                    CadenceProfile = cadenceProfile,
+                    HeartRateProfile = heartRateProfile,
+                    TimingProfile = timingProfile
                 };
 
             return View(viewModel);

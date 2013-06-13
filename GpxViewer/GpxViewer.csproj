@@ -206,9 +206,12 @@
       <DependentUpon>201306121813362_AddHeartRateToPoint.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CadenceProfile.cs" />
     <Compile Include="Models\ElevationProfile.cs" />
     <Compile Include="Models\GpxViewerContext.cs" />
+    <Compile Include="Models\HeartRateProfile.cs" />
     <Compile Include="Models\Point.cs" />
+    <Compile Include="Models\TimingProfile.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TrackSegment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
