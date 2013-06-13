@@ -4,6 +4,16 @@
     <h1>
         <img src="~/Images/gpxicon.png" />GPX Viewer</h1>
 </div>
+<div class="well">
+    <p>
+        GPX Viewer is a hobby site created by <a href="http://www.designmojo.com">Mike Williams</a>. As an avid cyclist and web developer, 
+        I wanted to really understand those files that get sent to Garmin from the GPS as well as learn some new technologies. For the techies out there, I'm using
+        ASP.NET MVC 4 and SQL Server. The site is using a modified bootstrap theme and is hosted on Windows Azure. I plan on adding stats that you probably won't find on Garmin's site. Please know that I will never sell this information
+        or share it. This site is open source and can be found on <a href="https://github.com/cmwilliams/GpxViewer">GitHub</a>.
+
+    </p>
+</div>
+
 <p>
     @Html.ActionLink("Upload GPX File", "Create", null, new { @class = "btn btn-primary" })
 </p>
@@ -50,7 +60,7 @@
                 </td>
                 <td>
                     @Html.ActionLink("Details", "Details", "Tracks", new { id = item.TrackId }, new { @class = "btn btn-info" })
-                   @*@Html.ActionLink("Delete", "Delete", "Tracks", new { id = item.TrackId }, new { @class = "btn btn-danger" })*@
+                    @*@Html.ActionLink("Delete", "Delete", "Tracks", new { id = item.TrackId }, new { @class = "btn btn-danger" })*@
                 </td>
             </tr>
         }
