@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GpxViewer.Models;
@@ -19,16 +20,19 @@ namespace GpxViewer.Helpers
 
 
 
-        //private Activity[] PointPairs(Activity activity)
-        //{
-        //    Di
-        //    for (var i = 0; i < activity.Points.Count-1; i++)
-        //    {
-        //       pairs[i] =
-                
-        //    }
+        private ArrayList PointPairs(Activity activity)
+        {
 
-        //}
+            var pairs = new ArrayList();
+            var points = activity.Points.ToList();
+            for (var i = 0; i < points.Count() - 1; i++)
+            {
+                var pair = new ArrayList { points[i], points[i + 1] };
+                pairs.Add(pair);
+            }
+
+            return pairs;
+        }
 
 
 
