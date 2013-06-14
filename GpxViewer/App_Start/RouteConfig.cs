@@ -12,7 +12,7 @@ namespace GpxViewer.App_Start
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Tracks", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Activities", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

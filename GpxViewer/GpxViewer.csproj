@@ -152,60 +152,27 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\TracksController.cs" />
+    <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\LocationHelper.cs" />
-    <Compile Include="Migrations\201306041550079_InitialMigration.cs" />
-    <Compile Include="Migrations\201306041550079_InitialMigration.Designer.cs">
-      <DependentUpon>201306041550079_InitialMigration.cs</DependentUpon>
+    <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Helpers\Statistics.cs" />
+    <Compile Include="Migrations\201306141516053_InitialMigration.cs" />
+    <Compile Include="Migrations\201306141516053_InitialMigration.Designer.cs">
+      <DependentUpon>201306141516053_InitialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201306061854354_FileAttributesToTracks.cs" />
-    <Compile Include="Migrations\201306061854354_FileAttributesToTracks.Designer.cs">
-      <DependentUpon>201306061854354_FileAttributesToTracks.cs</DependentUpon>
+    <Compile Include="Migrations\201306141528410_ActivityDateToActivity.cs" />
+    <Compile Include="Migrations\201306141528410_ActivityDateToActivity.Designer.cs">
+      <DependentUpon>201306141528410_ActivityDateToActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201306071300380_MakeTrackNameRequired.cs" />
-    <Compile Include="Migrations\201306071300380_MakeTrackNameRequired.Designer.cs">
-      <DependentUpon>201306071300380_MakeTrackNameRequired.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306071346513_UpdateToDateTracks.cs" />
-    <Compile Include="Migrations\201306071346513_UpdateToDateTracks.Designer.cs">
-      <DependentUpon>201306071346513_UpdateToDateTracks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306071421232_RemovePropertiesFromPoint.cs" />
-    <Compile Include="Migrations\201306071421232_RemovePropertiesFromPoint.Designer.cs">
-      <DependentUpon>201306071421232_RemovePropertiesFromPoint.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306071425263_ChangeTrackNameRequired.cs" />
-    <Compile Include="Migrations\201306071425263_ChangeTrackNameRequired.Designer.cs">
-      <DependentUpon>201306071425263_ChangeTrackNameRequired.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306111846237_ChangeDoubleToFloatForCoordinates.cs" />
-    <Compile Include="Migrations\201306111846237_ChangeDoubleToFloatForCoordinates.Designer.cs">
-      <DependentUpon>201306111846237_ChangeDoubleToFloatForCoordinates.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.cs" />
-    <Compile Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.Designer.cs">
-      <DependentUpon>201306111905266_ChangeFloatToDoubleForCoordinates.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306112029259_AddDescriptionToTrack.cs" />
-    <Compile Include="Migrations\201306112029259_AddDescriptionToTrack.Designer.cs">
-      <DependentUpon>201306112029259_AddDescriptionToTrack.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306121411496_MakePointDoublesNullable.cs" />
-    <Compile Include="Migrations\201306121411496_MakePointDoublesNullable.Designer.cs">
-      <DependentUpon>201306121411496_MakePointDoublesNullable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306121634526_AddCadenceToPoint.cs" />
-    <Compile Include="Migrations\201306121634526_AddCadenceToPoint.Designer.cs">
-      <DependentUpon>201306121634526_AddCadenceToPoint.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306121813362_AddHeartRateToPoint.cs" />
-    <Compile Include="Migrations\201306121813362_AddHeartRateToPoint.Designer.cs">
-      <DependentUpon>201306121813362_AddHeartRateToPoint.cs</DependentUpon>
+    <Compile Include="Migrations\201306141606477_ChangeDecimalPrecisionForPoints.cs" />
+    <Compile Include="Migrations\201306141606477_ChangeDecimalPrecisionForPoints.Designer.cs">
+      <DependentUpon>201306141606477_ChangeDecimalPrecisionForPoints.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\CadenceProfile.cs" />
     <Compile Include="Models\ElevationProfile.cs" />
     <Compile Include="Models\GpxViewerContext.cs" />
@@ -215,9 +182,9 @@
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TrackSegment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\CreateTrackViewModel.cs" />
-    <Compile Include="ViewModels\TrackDetailViewModel.cs" />
-    <Compile Include="ViewModels\TracksViewModel.cs" />
+    <Compile Include="ViewModels\CreateActivityViewModel.cs" />
+    <Compile Include="ViewModels\ActivityDetailViewModel.cs" />
+    <Compile Include="ViewModels\ActivitiesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-responsive.css" />
@@ -327,12 +294,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Tracks\Index.cshtml" />
-    <Content Include="Views\Tracks\Create.cshtml" />
+    <Content Include="Views\Activities\Index.cshtml" />
+    <Content Include="Views\Activities\Create.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SimpleMessage.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MessageBase.cshtml" />
-    <Content Include="Views\Tracks\Details.cshtml" />
-    <Content Include="Views\Tracks\Delete.cshtml" />
+    <Content Include="Views\Activities\Details.cshtml" />
+    <Content Include="Views\Activities\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -342,41 +309,14 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201306041550079_InitialMigration.resx">
-      <DependentUpon>201306041550079_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201306141516053_InitialMigration.resx">
+      <DependentUpon>201306141516053_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306061854354_FileAttributesToTracks.resx">
-      <DependentUpon>201306061854354_FileAttributesToTracks.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201306141528410_ActivityDateToActivity.resx">
+      <DependentUpon>201306141528410_ActivityDateToActivity.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306071300380_MakeTrackNameRequired.resx">
-      <DependentUpon>201306071300380_MakeTrackNameRequired.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306071346513_UpdateToDateTracks.resx">
-      <DependentUpon>201306071346513_UpdateToDateTracks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306071421232_RemovePropertiesFromPoint.resx">
-      <DependentUpon>201306071421232_RemovePropertiesFromPoint.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306071425263_ChangeTrackNameRequired.resx">
-      <DependentUpon>201306071425263_ChangeTrackNameRequired.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306111846237_ChangeDoubleToFloatForCoordinates.resx">
-      <DependentUpon>201306111846237_ChangeDoubleToFloatForCoordinates.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306111905266_ChangeFloatToDoubleForCoordinates.resx">
-      <DependentUpon>201306111905266_ChangeFloatToDoubleForCoordinates.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306112029259_AddDescriptionToTrack.resx">
-      <DependentUpon>201306112029259_AddDescriptionToTrack.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306121411496_MakePointDoublesNullable.resx">
-      <DependentUpon>201306121411496_MakePointDoublesNullable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306121634526_AddCadenceToPoint.resx">
-      <DependentUpon>201306121634526_AddCadenceToPoint.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306121813362_AddHeartRateToPoint.resx">
-      <DependentUpon>201306121813362_AddHeartRateToPoint.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201306141606477_ChangeDecimalPrecisionForPoints.resx">
+      <DependentUpon>201306141606477_ChangeDecimalPrecisionForPoints.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

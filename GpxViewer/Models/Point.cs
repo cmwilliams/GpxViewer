@@ -5,13 +5,20 @@ namespace GpxViewer.Models
     public class Point
     {
         public int PointId { get; set; }
-        public int TrackSegmentId { get; set; }
-        public TrackSegment TrackSegment { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public double? Elevation { get; set; }
-        public int? Cadence { get; set; }
+        public DateTime? Time { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public decimal? Elevation { get; set; }
+        public decimal? Distance { get; set; }
+        public decimal? Duration { get; set; }
+        public decimal? ActiveDuration { get; set; }
+        public decimal? Pace { get; set; }
+        public decimal? Speed { get; set; }
         public int? HeartRate { get; set; }
-        public DateTime? PointCreatedAt { get; set; }
+        public int? Cadence { get; set; }
+
+        public int ActivityId { get; set; }
+        public Activity Activity { get; set; }
+
     }
 }

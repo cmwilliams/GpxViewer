@@ -16,7 +16,7 @@ namespace GpxViewer.Helpers
         public static string GetPolyline(this IEnumerable<Point> points)
         {
             var polylinePoints =
-                points.OrderBy(p => p.PointCreatedAt)
+                points.OrderBy(p => p.Time)
                       .Select(
                           point =>
                           new PolylineCoordinate
@@ -114,8 +114,8 @@ namespace GpxViewer.Helpers
             var segmentPoints = points.ToList();
             for (var i = 0; i < segmentPoints.Count - 1; i++)
             {
-                var time1 = Convert.ToDateTime(segmentPoints[i].PointCreatedAt);
-                var time2 = Convert.ToDateTime(segmentPoints[i+1].PointCreatedAt);
+                var time1 = Convert.ToDateTime(segmentPoints[i].Time);
+                var time2 = Convert.ToDateTime(segmentPoints[i + 1].Time);
                 if (time1 > time2)
                 {
                     var diffResult = time1.Subtract(time2);
@@ -201,8 +201,8 @@ namespace GpxViewer.Helpers
             var enumerable = points as IList<Point> ?? points.ToList();
             
             //Get Total Time
-            var minTime = enumerable.OrderBy(p => p.PointCreatedAt).Min(p => p.PointCreatedAt);
-            var maxTime = enumerable.OrderBy(p => p.PointCreatedAt).Max(p => p.PointCreatedAt);
+            var minTime = enumerable.OrderBy(p => p.Time).Min(p => p.Time);
+            var maxTime = enumerable.OrderBy(p => p.Time).Max(p => p.Time);
             if (minTime != null && maxTime != null)
             {
                 var startTime = Convert.ToDateTime(minTime);
@@ -273,65 +273,65 @@ namespace GpxViewer.Helpers
             return xElement != null ? Convert.ToDateTime(xElement.Value) : (DateTime?)null;
         }
 
-        public static Track ParseGpx(Track exitingTrack, Stream document)
-        {
-            var gpxDoc = LoadFromStream(document);
-            var gpx = GetGpxNameSpace();
-            var gpxtpx = GetGpxtpxNameSpace();
+        //public static Track ParseGpx(Track exitingTrack, Stream document)
+        //{
+        //    var gpxDoc = LoadFromStream(document);
+        //    var gpx = GetGpxNameSpace();
+        //    var gpxtpx = GetGpxtpxNameSpace();
 
-            var tracks = from track in gpxDoc.Descendants(gpx + "trk")
-                         select new
-                         {
-                             Name = DefaultStringValue(track, gpx, "name"),
-                             Description = DefaultStringValue(track, gpx, "desc"),
-                             Segments = (from trkSegment in track.Descendants(gpx + "trkseg")
-                                         select new
-                                         {
-                                             TrackSegment = trkSegment,
-                                             Points = (from trackpoint in trkSegment.Descendants(gpx + "trkpt")
-                                                       select new
-                                                       {
-                                                           Lat = Double(trackpoint.Attribute("lat").Value),
-                                                           Lng = Double(trackpoint.Attribute("lon").Value),
-                                                           Ele = DefaultDoubleValue(trackpoint, gpx, "ele"),
-                                                           Time = DefaultDateTimeValue(trackpoint, gpx, "time"),
-                                                           Extensions = (
-                                                                  from ext in trackpoint.Descendants(gpx + "extensions").Descendants(gpxtpx + "TrackPointExtension")
-                                                                  select new
-                                                                  {
-                                                                      Cad = DefaultIntValue(ext, gpxtpx, "cad"),
-                                                                      Hr = DefaultIntValue(ext, gpxtpx, "hr"),
-                                                                  }).SingleOrDefault()
-                                                       })
-                                         })
-                         };
+        //    var tracks = from track in gpxDoc.Descendants(gpx + "trk")
+        //                 select new
+        //                 {
+        //                     Name = DefaultStringValue(track, gpx, "name"),
+        //                     Description = DefaultStringValue(track, gpx, "desc"),
+        //                     Segments = (from trkSegment in track.Descendants(gpx + "trkseg")
+        //                                 select new
+        //                                 {
+        //                                     TrackSegment = trkSegment,
+        //                                     Points = (from trackpoint in trkSegment.Descendants(gpx + "trkpt")
+        //                                               select new
+        //                                               {
+        //                                                   Lat = Double(trackpoint.Attribute("lat").Value),
+        //                                                   Lng = Double(trackpoint.Attribute("lon").Value),
+        //                                                   Ele = DefaultDoubleValue(trackpoint, gpx, "ele"),
+        //                                                   Time = DefaultDateTimeValue(trackpoint, gpx, "time"),
+        //                                                   Extensions = (
+        //                                                          from ext in trackpoint.Descendants(gpx + "extensions").Descendants(gpxtpx + "TrackPointExtension")
+        //                                                          select new
+        //                                                          {
+        //                                                              Cad = DefaultIntValue(ext, gpxtpx, "cad"),
+        //                                                              Hr = DefaultIntValue(ext, gpxtpx, "hr"),
+        //                                                          }).SingleOrDefault()
+        //                                               })
+        //                                 })
+        //                 };
 
-            foreach (var trk in tracks)
-            {
-                exitingTrack.Name = trk.Name;
-                exitingTrack.Description = trk.Description;
+        //    foreach (var trk in tracks)
+        //    {
+        //        exitingTrack.Name = trk.Name;
+        //        exitingTrack.Description = trk.Description;
 
-                foreach (var segment in trk.Segments)
-                {
-                    var trackSegment = new TrackSegment { Points = new Collection<Point>() };
+        //        foreach (var segment in trk.Segments)
+        //        {
+        //            var trackSegment = new TrackSegment { Points = new Collection<Point>() };
 
-                    foreach (var point in segment.Points)
-                    {
-                        trackSegment.Points.Add(new Point
-                        {
-                            Elevation = point.Ele,
-                            Latitude = point.Lat,
-                            Longitude = point.Lng,
-                            PointCreatedAt = point.Time,
-                            Cadence = point.Extensions != null ? point.Extensions.Cad : null,
-                            HeartRate = point.Extensions != null ? point.Extensions.Hr : null
-                        });
-                    }
+        //            foreach (var point in segment.Points)
+        //            {
+        //                trackSegment.Points.Add(new Point
+        //                {
+        //                    Elevation = point.Ele,
+        //                    Latitude = point.Lat,
+        //                    Longitude = point.Lng,
+        //                    Time = point.Time,
+        //                    Cadence = point.Extensions != null ? point.Extensions.Cad : null,
+        //                    HeartRate = point.Extensions != null ? point.Extensions.Hr : null
+        //                });
+        //            }
 
-                    exitingTrack.TrackSegments.Add(trackSegment);
-                }
-            }
-            return exitingTrack;
-        }
+        //            exitingTrack.TrackSegments.Add(trackSegment);
+        //        }
+        //    }
+        //    return exitingTrack;
+        //}
     }
 }

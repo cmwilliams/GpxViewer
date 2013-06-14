@@ -1,0 +1,26 @@
+﻿@model GpxViewer.Models.Activity
+<div class="page-header color">
+    <h1>Delete GPX File</h1>
+</div>
+
+<dl class="dl-horizontal">
+    <dt>
+        <strong>Name:</strong>
+    </dt>
+    <dd>
+        @Model.Name
+    </dd>
+  
+</dl>
+
+<div class="form-actions">
+   @using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn" })
+    </p>
+}
+
+</div>
+
