@@ -1,204 +1,262 @@
-﻿@model GpxViewer.ViewModels.TrackDetailViewModel
+﻿@model GpxViewer.ViewModels.ActivityDetailViewModel
+@using GpxViewer.Helpers
 
 <div class="page-header color">
-    <h1>@Model.Track.Name</h1>
-</div>
+    <h1>@Model.Activity.Name</h1>
 
+    <dl class="dl-horizontal">
+        @if (!string.IsNullOrEmpty(Model.Activity.Description))
+        {
+            <dt>
+                <strong>Description:</strong>
+            </dt>
+            <dd>
+                @Model.Activity.Description
+            </dd>
+        }
+    </dl>
+</div>
 <div class="row-fluid">
     <div class="span6">
-        <dl class="dl-horizontal">
-            @if (!string.IsNullOrEmpty(Model.Track.Description))
-            {
-                <dt>
-                    <strong>Description:</strong>
-                </dt>
-                <dd>
-                    @Model.Track.Description
-                </dd>
-                <br />
-            }
-            <dt>
-                <strong>File name:</strong>
-            </dt>
-            <dd>
-                @Model.Track.FileName
-            </dd>
-            <dt>
-                <strong>Content type:</strong>
-            </dt>
-            <dd>
-                @Model.Track.FileContentType
-            </dd>
-            <dt>
-                <strong>File size:</strong>
-            </dt>
-            <dd>
-                @Model.Track.FileSize
-            </dd>
-            <dt>
-                <strong>File updated at:</strong>
-            </dt>
-            <dd>
-                @Model.Track.FileUpdatedAt
-            </dd>
-        </dl>
 
-        <h4>Summary</h4>
-        <dl class="dl-horizontal">
-            @if (Model.Distance > 0)
-            {
+        <div class="well">
+            <h4>Summary</h4>
+            <dl class="dl-horizontal">
                 <dt>
                     <strong>Distance:</strong>
                 </dt>
                 <dd>
-                    @Model.Distance miles
+                    @Model.Activity.Distance.FormatDistance() mi
                 </dd>
-            }
-             @if (Model.TimingProfile != null)
-            {
                 <dt>
                     <strong>Time:</strong>
                 </dt>
                 <dd>
-                    @Model.TimingProfile.Time
+                    @Model.Activity.ActiveDuration.FormatTime()
                 </dd>
-            }
-            @if (Model.ElevationProfile != null)
-            {
+
+                <dt>
+                    <strong>Avg Speed:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AverageSpeed.FormatSpeed() mph
+                </dd>
                 <dt>
                     <strong>Elevation Gain:</strong>
                 </dt>
                 <dd>
-                    @Model.ElevationProfile.Gain ft
+                    @Model.Activity.ElevationGain.FormatElevation() ft
                 </dd>
-            }
-        </dl>
-        @if (Model.TimingProfile != null)
-        {
-            <h4>Timing</h4>
+            </dl>
+            <h4>Distance</h4>
             <dl class="dl-horizontal">
                 <dt>
-                    <strong>Time:</strong>
+                    <strong>Distance:</strong>
                 </dt>
                 <dd>
-                    @Model.TimingProfile.Time
+                    @Model.Activity.Distance.FormatDistance() mi
                 </dd>
-                 
-               
-            </dl>
-        }
+                <dt>
+                    <strong>Asc Distance:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AscendingDistance.FormatDistance() mi
+                </dd>
 
-        @if (Model.ElevationProfile != null)
-        {
+                <dt>
+                    <strong>Desc Distance:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.DescendingDistance.FormatDistance() mi
+                </dd>
+                <dt>
+                    <strong>Flat Distance:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.FlatDistance.FormatDistance() mi
+                </dd>
+            </dl>
+            <h4>Duration</h4>
+            <dl class="dl-horizontal">
+                <dt>
+                    <strong>Duration:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.Duration.FormatTime()
+                </dd>
+                <dt>
+                    <strong>Active Duration:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.ActiveDuration.FormatTime()
+                </dd>
+                <dt>
+                    <strong>Asc Duration:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AscendingDuration.FormatTime()
+                </dd>
+
+                <dt>
+                    <strong>Desc Duration:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.DescendingDuration.FormatTime()
+                </dd>
+                <dt>
+                    <strong>Flat Duration:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.FlatDuration.FormatTime()
+                </dd>
+            </dl>
             <h4>Elevation</h4>
             <dl class="dl-horizontal">
                 <dt>
                     <strong>Elevation Gain:</strong>
                 </dt>
                 <dd>
-                    @Model.ElevationProfile.Gain ft
+                    @Model.Activity.ElevationGain.FormatElevation() ft
                 </dd>
                 <dt>
                     <strong>Elevation Loss:</strong>
                 </dt>
                 <dd>
-                    @Model.ElevationProfile.Loss ft
-                </dd>
-                <dt>
-                    <strong>Min Elevation:</strong>
-                </dt>
-                <dd>
-                    @Model.ElevationProfile.MinElevation ft
+                    @Model.Activity.ElevationLoss.FormatElevation() ft
                 </dd>
                 <dt>
                     <strong>Max Elevation:</strong>
                 </dt>
                 <dd>
-                    @Model.ElevationProfile.MaxElevation ft
+                    @Model.Activity.MaximumElevation.FormatElevation() ft
+                </dd>
+
+                <dt>
+                    <strong>Min Elevation:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.MaximumElevation.FormatElevation() ft
+                </dd>
+                <dt>
+                    <strong>Elevation Change:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.ElevationChange.FormatElevation() ft
                 </dd>
             </dl>
-        }
-
-        @if (Model.HeartRateProfile != null)
-        {
-            <h4>Heart Rate</h4>
+            <h4>Speed</h4>
             <dl class="dl-horizontal">
                 <dt>
-                    <strong>Avg HR:</strong>
+                    <strong>Avg Speed:</strong>
                 </dt>
                 <dd>
-                    @Model.HeartRateProfile.AvgHeartRate bpm
+                    @Model.Activity.AverageSpeed.FormatSpeed() mph
                 </dd>
                 <dt>
-                    <strong>Max HR:</strong>
+                    <strong>Max Speed:</strong>
                 </dt>
                 <dd>
-                    @Model.HeartRateProfile.MaxHeartRate bpm
+                    @Model.Activity.MaximumSpeed.FormatSpeed() mph
+                </dd>
+                <dt>
+                    <strong>Avg Asc Speed:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AverageAscendingSpeed.FormatSpeed() mph
                 </dd>
 
+                <dt>
+                    <strong>Avg Desc Speed:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AverageDescendingSpeed.FormatSpeed() mph
+                </dd>
+                <dt>
+                    <strong>Avg Flat Speed:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AverageFlatSpeed.FormatSpeed() mph
+                </dd>
             </dl>
-        }
-        
-         @if (Model.CadenceProfile != null)
-        {
-            <h4>Cadence</h4>
+            <h4>Pace</h4>
             <dl class="dl-horizontal">
                 <dt>
-                    <strong>Avg Cadence:</strong>
+                    <strong>Avg Pace:</strong>
                 </dt>
                 <dd>
-                    @Model.CadenceProfile.AvgCadence rpm
+                    @Model.Activity.AveragePace.FormatPace()  min/mi
                 </dd>
                 <dt>
-                    <strong>Max Cadence:</strong>
+                    <strong>Avg Asc Pace:</strong>
                 </dt>
                 <dd>
-                    @Model.CadenceProfile.MaxCadence rpm
+                    @Model.Activity.AverageAscendingPace.FormatPace()  min/mi
                 </dd>
 
+                <dt>
+                    <strong>Avg Desc Pace:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AverageDescendingPace.FormatPace()  min/mi
+                </dd>
+                <dt>
+                    <strong>Avg Flat Pace:</strong>
+                </dt>
+                <dd>
+                    @Model.Activity.AverageFlatPace.FormatPace()  min/mi
+                </dd>
             </dl>
-        }
-
-
-
-        <div class="form-actions">
-            @Html.ActionLink("Back", "Index", "Tracks", null, new { @class = "btn" })
-            @* @Html.ActionLink("Delete", "Delete", "Tracks", new { id = Model.Track.TrackId }, new { @class = "btn btn-danger" })*@
         </div>
+
+        @Html.ActionLink("Back", "Index", "Activities", null, new { @class = "btn" })
+
     </div>
     <div class="span6">
-        <div id="map_canvas" style="height: 500px;"></div>
+        <div class="well">
+            <div id="map_canvas" style="height: 500px;"></div>
+        </div>
     </div>
 </div>
 
 
 
-<h2>Points</h2>
+@*<h2>Points</h2>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>Time</th>
             <th>Latitude</th>
             <th>Longitude</th>
             <th>Elevation</th>
-            <th>Time</th>
+            <th>Distance</th>
+            <th>Duration</th>
+            <th>Active Duration</th>
+            <th>Pace</th>
+            <th>Speed</th>
+            <th>Cadence</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var point in Model.Track.TrackSegments.SelectMany(trackSegment => trackSegment.Points))
+        @foreach (var point in Model.Activity.Points)
         {
             <tr>
-                <td>@point.PointId</td>
+                <td>@point.Time</td>
                 <td>@point.Latitude</td>
                 <td>@point.Longitude</td>
                 <td>@point.Elevation</td>
-                <td>@point.PointCreatedAt</td>
+                <td>@point.Distance</td>
+                <td>@point.Duration</td>
+                <td>@point.ActiveDuration</td>
+                <td>@point.Pace</td>
+                <td>@point.Speed</td>
+                <td>@point.Cadence</td>
+
             </tr>
         }
 
     </tbody>
-</table>
+</table>*@
 
 @section scripts
 {
