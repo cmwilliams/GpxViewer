@@ -21,7 +21,7 @@ namespace GpxViewer.Helpers
             //activity.MaximumElevation = MaximumElevation(activity);
             //activity.MinimumElevation = MinimumElevation(activity);
             activity.Duration = Duration(activity);
-            //activity.ActiveDuration = ActiveDuration(activity);
+            activity.ActiveDuration = ActiveDuration(activity);
             //activity.AscendingDuration = AscendingDuration(activity);
             //activity.DescendingDuration = DescendingDuration(activity);
             //activity.FlatDuration = FlatDuration(activity);
@@ -188,30 +188,18 @@ namespace GpxViewer.Helpers
             
          
 
-            decimal? total = 0;
-            
-            var sum = 0;
+            double total = 0;
+
             var pointPairs = PointPairs(activity);
-            sum = pointPairs.Aggregate(sum,
-                                 (starterVal, item) =>
-                                     {
-                                         item.FirstPoint.Duration = sum;
-                                         item.SecondPoint.Duration = sum +
-                                                                     TimeBetween(item.FirstPoint, item.SecondPoint);
-                                         return sum;
-                                     });
+            foreach (var pointPair in pointPairs)
+            {
+                pointPair.FirstPoint.Duration = (decimal?) total;
+                pointPair.SecondPoint.Duration = (decimal?) (total + TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint));
+                total += TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint);
+            }
 
 
-            //foreach (var pointPair in pointPairs)
-            //{
-            //    pointPair.FirstPoint.Duration = total;
-            //    pointPair.SecondPoint.Duration = total + TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint);
-            //    total = pointPair.SecondPoint.Duration;
-            //}
-            return sum;
-
-
-            //var pointPairs = PointPairs(activity);
+            
             //for (var i = 0; i < pointPairs.Count - 1; i++)
             //{
             //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count-1; j++)
@@ -225,7 +213,7 @@ namespace GpxViewer.Helpers
             //    }
             //}
 
-            return total;
+            return (decimal?) total;
         }
 
         public static decimal? ActiveDuration(Activity activity)
@@ -240,30 +228,23 @@ namespace GpxViewer.Helpers
             }
 
 
-            decimal? durationTotal = 0;
-            decimal? total = 0;
+            double total = 0;
 
             var pointPairs = PointPairs(activity);
-            //foreach (var point in pointPairs)
-            //{
-            //    for (var j = 0; j < ((ArrayList)point).Count - 1; j++)
-            //    {
-                    
-            //        var firstPoint = (Point)((ArrayList)point)[j];
-            //        var secondPoint = (Point)((ArrayList)point)[j + 1];
+            foreach (var pointPair in pointPairs)
+            {
+                if (IsActiveBetween(pointPair.FirstPoint, pointPair.SecondPoint))
+                {
+                    pointPair.FirstPoint.ActiveDuration = (decimal?) total;
+                    pointPair.SecondPoint.ActiveDuration =
+                        (decimal?) (total + TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint));
+                    total += TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint);
+                }
+            }
 
-            //        if (IsActiveBetween(firstPoint, secondPoint))
-            //        {
-            //            firstPoint.ActiveDuration = total;
-            //            secondPoint.ActiveDuration = total + (decimal?)TimeBetween(firstPoint, secondPoint) ?? 0;
-            //            total = secondPoint.ActiveDuration;
-            //            durationTotal += total + secondPoint.ActiveDuration;
-            //        }
-            //    }
-            //}
+            return (decimal?)total;
 
-
-            return total;
+           
         }
 
         public static decimal? AscendingDuration(Activity activity)
@@ -355,78 +336,29 @@ namespace GpxViewer.Helpers
 
         #region Private
 
-        public class EachWithIndexIterator<T>
+       
+
+        public static void Each<T>(this IEnumerable<T> ie, Action<T, int> action)
         {
-            private readonly IEnumerable<T> values;
-
-            internal EachWithIndexIterator(IEnumerable<T> values)
-            {
-                this.values = values;
-            }
-
-            public void Do(Action<T, int> action)
-            {
-                int i = 0;
-                foreach (var item in values)
-                {
-                    action(item, i++);
-                }
-            }
+            var i = 0;
+            foreach (var e in ie) action(e, i++);
         }
-
-        public static EachWithIndexIterator<T> EachWithIndex<T>(this IEnumerable<T> values)
-        {
-            return new EachWithIndexIterator<T>(values);
-        }
-
-        //public static void Each<T>(this IEnumerable<T> ie, Action<T, int> action)
-        //{
-        //    var i = 0;
-        //    foreach (var e in ie) action(e, i++);
-        //}
-
-        public class PointPair
-        {
-            public Point FirstPoint { get; set; }
-            public Point SecondPoint { get; set; }
-        }
-
 
         private static List<PointPair> PointPairs(Activity activity)
         {
             var points = activity.Points.OrderBy(p => p.Time).ToList();
             var pairs = new List<PointPair>();
-            points.EachWithIndex().Do((point, index) =>
-                                          {
-                                              if(index < points.Count() - 1)
-                                              {
-                                                  var pair = new PointPair
-                                                                 {
-                                                                     FirstPoint = point,
-                                                                     SecondPoint = points[index + 1]
-                                                                 };
-                                                  pairs.Add(pair);
-                                              }
-                                          } );
+            points.Each((point, index) =>
+                {
+                    if (index >= points.Count() - 1) return;
+                    var pair = new PointPair
+                        {
+                            FirstPoint = point,
+                            SecondPoint = points[index + 1]
+                        };
+                    pairs.Add(pair);
+                });
 
-
-            //points.Each((point, i) =>
-            //                         {
-            //                             if (i < activity.Points.Count - 1)
-            //                             {
-            //                                 var pair = new PointPair { FirstPoint = point, SecondPoint = points[i + 1] };
-            //                                 pairs.Add(pair);
-            //                             }
-            //                         });
-
-
-            
-            //var points = activity.Points.OrderBy(p => p.Time).ToList();
-            //for (var i = 1; i < points.Count(); i++)
-            //{
-            //    var pair = new ArrayList { points[i], points[i + 1] };
-            //    pairs.Add(pair);
-            //}
 
             return pairs;
         }
@@ -572,17 +504,14 @@ namespace GpxViewer.Helpers
             return time/distance;
         }
 
-        private static int TimeBetween(Point startPoint, Point endPoint)
+        private static double TimeBetween(Point startPoint, Point endPoint)
         {
             if (startPoint.Time == null && endPoint.Time == null)
                 return 0;
 
             var endPointTime = Convert.ToDateTime(endPoint.Time);
             var startPointTime = Convert.ToDateTime(startPoint.Time);
-            
-
-
-            return endPointTime.Subtract(startPointTime).Seconds;
+            return  endPointTime.Subtract(startPointTime).TotalSeconds;
         }
 
         private static decimal ElevationBetween(Point startPoint, Point endPoint)

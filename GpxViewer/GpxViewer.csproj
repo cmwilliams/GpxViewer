@@ -158,6 +158,7 @@
     </Compile>
     <Compile Include="Helpers\LocationHelper.cs" />
     <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Helpers\PointPair.cs" />
     <Compile Include="Helpers\Statistics.cs" />
     <Compile Include="Migrations\201306141516053_InitialMigration.cs" />
     <Compile Include="Migrations\201306141516053_InitialMigration.Designer.cs">
