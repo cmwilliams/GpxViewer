@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GpxViewer.Models;
@@ -12,19 +11,31 @@ namespace GpxViewer.Helpers
         {
             activity.ActivityDate = StartTime(activity);
             activity.Distance = Distance(activity);
-            //activity.AscendingDistance = AscendingDistance(activity);
-            //activity.DescendingDistance = DescendingDistance(activity);
-            //activity.FlatDistance = FlatDistance(activity);
-            //activity.ElevationGain = ElevationGain(activity);
-            //activity.ElevationLoss = ElevationLoss(activity);
-            //activity.ElevationChange = ElevationChange(activity);
-            //activity.MaximumElevation = MaximumElevation(activity);
-            //activity.MinimumElevation = MinimumElevation(activity);
+            activity.AscendingDistance = AscendingDistance(activity);
+            activity.DescendingDistance = DescendingDistance(activity);
+            activity.FlatDistance = FlatDistance(activity);
+            activity.ElevationGain = ElevationGain(activity);
+            activity.ElevationLoss = ElevationLoss(activity);
+            activity.ElevationChange = ElevationChange(activity);
+            activity.MaximumElevation = MaximumElevation(activity);
+            activity.MinimumElevation = MinimumElevation(activity);
             activity.Duration = Duration(activity);
             activity.ActiveDuration = ActiveDuration(activity);
-            //activity.AscendingDuration = AscendingDuration(activity);
-            //activity.DescendingDuration = DescendingDuration(activity);
-            //activity.FlatDuration = FlatDuration(activity);
+            activity.AscendingDuration = AscendingDuration(activity);
+            activity.DescendingDuration = DescendingDuration(activity);
+            activity.FlatDuration = FlatDuration(activity);
+            activity.AveragePace = AveragePace(activity);
+            activity.AverageAscendingPace = AverageAscendingPace(activity);
+            activity.AverageDescendingPace = AverageDescendingPace(activity);
+            activity.AverageFlatPace = AverageFlatPace(activity);
+            activity.AverageSpeed = AverageSpeed(activity);
+            activity.AverageAscendingSpeed = AverageAscendingSpeed(activity);
+            activity.AverageDescendingSpeed = AverageDescendingSpeed(activity);
+            activity.AverageFlatSpeed = AverageFlatSpeed(activity);
+            activity.MaximumSpeed = MaximumSpeed(activity);
+            activity.AverageHeartRate = AverageHeartRate(activity);
+            activity.MaximumHeartRate = MaximumHeartRate(activity);
+            activity.AverageCadence = AverageCadence(activity);
 
             return activity;
         }
@@ -49,112 +60,33 @@ namespace GpxViewer.Helpers
 
         public static decimal? AscendingDistance(Activity activity)
         {
-            decimal? distanceTotal = 0;
-
             var pointPairs = AscendingPointPairs(activity);
-            for (var i = 0; i < pointPairs.Count - 1; i++)
-            {
-                for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-                {
-                    decimal? total = 0;
-                    var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-                    var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-                    
-                    distanceTotal += total + (decimal)DistanceBetween(firstPoint, secondPoint);
-                }
-
-            }
-
-            return distanceTotal;
+            return pointPairs.Aggregate<PointPair, decimal?>(0, (current, pointPair) => current + (decimal?) DistanceBetween(pointPair.FirstPoint, pointPair.SecondPoint));
         }
 
         public static decimal? DescendingDistance(Activity activity)
         {
-            decimal? distanceTotal = 0;
-
             var pointPairs = DescendingPointPairs(activity);
-            for (var i = 0; i < pointPairs.Count - 1; i++)
-            {
-                for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-                {
-                    decimal? total = 0;
-                    var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-                    var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-
-                    distanceTotal += total + (decimal)DistanceBetween(firstPoint, secondPoint);
-                }
-
-            }
-
-            return distanceTotal;
+            return pointPairs.Aggregate<PointPair, decimal?>(0, (current, pointPair) => current + (decimal?)DistanceBetween(pointPair.FirstPoint, pointPair.SecondPoint));
         }
 
         public static decimal? FlatDistance(Activity activity)
         {
-            decimal? distanceTotal = 0;
-
             var pointPairs = FlatPointPairs(activity);
-            for (var i = 0; i < pointPairs.Count - 1; i++)
-            {
-                for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-                {
-                    decimal? total = 0;
-                    var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-                    var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
+            return pointPairs.Aggregate<PointPair, decimal?>(0, (current, pointPair) => current + (decimal?)DistanceBetween(pointPair.FirstPoint, pointPair.SecondPoint));
 
-
-                    distanceTotal += total + (decimal)DistanceBetween(firstPoint, secondPoint);
-                }
-
-            }
-
-            return distanceTotal;
         }
 
         public static decimal? ElevationGain(Activity activity)
         {
-            decimal? elevationTotal = 0;
-
             var pointPairs = AscendingPointPairs(activity);
-            for (var i = 0; i < pointPairs.Count - 1; i++)
-            {
-                for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-                {
-                    decimal? total = 0;
-                    var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-                    var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-
-                    elevationTotal += total + (decimal)ElevationBetween(firstPoint, secondPoint);
-                }
-
-            }
-
-            return elevationTotal;
+            return pointPairs.Aggregate<PointPair, decimal?>(0, (current, pointPair) => current + (decimal?)ElevationBetween(pointPair.FirstPoint, pointPair.SecondPoint));
         }
 
         public static decimal? ElevationLoss(Activity activity)
         {
-            decimal? elevationTotal = 0;
-
             var pointPairs = DescendingPointPairs(activity);
-            for (var i = 0; i < pointPairs.Count - 1; i++)
-            {
-                for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-                {
-                    decimal? total = 0;
-                    var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-                    var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-
-                    elevationTotal += total + (decimal)ElevationBetween(firstPoint, secondPoint);
-                }
-
-            }
-
-            return elevationTotal;
+            return pointPairs.Aggregate<PointPair, decimal?>(0, (current, pointPair) => current + (decimal?)ElevationBetween(pointPair.FirstPoint, pointPair.SecondPoint)) * -1;
         }
 
         public static decimal? ElevationChange(Activity activity)
@@ -172,8 +104,6 @@ namespace GpxViewer.Helpers
             return activity.Points.Any() ? activity.Points.Min(p => p.Elevation) : null;
         }
 
-
-       
         public static decimal? Duration(Activity activity)
         {
             if (activity.Points.Count < 2)
@@ -184,9 +114,6 @@ namespace GpxViewer.Helpers
                 }
                 return 0;
             }
-            
-            
-         
 
             double total = 0;
 
@@ -195,23 +122,9 @@ namespace GpxViewer.Helpers
             {
                 pointPair.FirstPoint.Duration = (decimal?) total;
                 pointPair.SecondPoint.Duration = (decimal?) (total + TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint));
-                total += TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint);
+                total = (double) pointPair.SecondPoint.Duration;
             }
 
-
-            
-            //for (var i = 0; i < pointPairs.Count - 1; i++)
-            //{
-            //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count-1; j++)
-            //    {
-            //        var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-            //        var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-            //        firstPoint.Duration = total;
-            //        secondPoint.Duration = total + TimeBetween(firstPoint, secondPoint);
-            //        total = secondPoint.Duration;
-            //    }
-            //}
 
             return (decimal?) total;
         }
@@ -231,15 +144,12 @@ namespace GpxViewer.Helpers
             double total = 0;
 
             var pointPairs = PointPairs(activity);
-            foreach (var pointPair in pointPairs)
+            foreach (var pointPair in pointPairs.Where(pointPair => IsActiveBetween(pointPair.FirstPoint, pointPair.SecondPoint)))
             {
-                if (IsActiveBetween(pointPair.FirstPoint, pointPair.SecondPoint))
-                {
-                    pointPair.FirstPoint.ActiveDuration = (decimal?) total;
-                    pointPair.SecondPoint.ActiveDuration =
-                        (decimal?) (total + TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint));
-                    total += TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint);
-                }
+                pointPair.FirstPoint.ActiveDuration = (decimal?) total;
+                pointPair.SecondPoint.ActiveDuration =
+                    (decimal?) (total + TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint));
+                total += TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint);
             }
 
             return (decimal?)total;
@@ -249,94 +159,192 @@ namespace GpxViewer.Helpers
 
         public static decimal? AscendingDuration(Activity activity)
         {
-            
-            decimal? durationTotal = 0;
-
             var pointPairs = PointPairs(activity);
-            //for (var i = 0; i < pointPairs.Count - 1; i++)
-            //{
-            //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-            //    {
+            var total =
+                pointPairs.Where(
+                    pointPair =>
+                    IsActiveBetween(pointPair.FirstPoint, pointPair.SecondPoint) &&
+                    IsAscendingBetween(pointPair.FirstPoint, pointPair.SecondPoint))
+                          .Aggregate<PointPair, double>(0,
+                                                        (current, pointPair) =>
+                                                        (current +
+                                                         TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint)));
 
-            //        var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-            //        var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-            //        if (IsActiveBetween(firstPoint, secondPoint) && IsAscendingBetween(firstPoint,secondPoint))
-            //        {
-            //            decimal? total = 0;
-            //            firstPoint.Duration = total;
-            //            secondPoint.Duration = total + TimeBetween(firstPoint, secondPoint);
-            //            durationTotal += firstPoint.Duration + secondPoint.Duration;
-            //        }
-            //    }
-
-            //}
-
-
-            return durationTotal;
+            return (decimal?)total;
         }
 
         public static decimal? DescendingDuration(Activity activity)
         {
-
-            decimal? durationTotal = 0;
-
             var pointPairs = PointPairs(activity);
-            //for (var i = 0; i < pointPairs.Count - 1; i++)
-            //{
-            //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-            //    {
+            var total =
+                pointPairs.Where(
+                    pointPair =>
+                    IsActiveBetween(pointPair.FirstPoint, pointPair.SecondPoint) &&
+                    IsDescendingBetween(pointPair.FirstPoint, pointPair.SecondPoint))
+                          .Aggregate<PointPair, double>(0,
+                                                        (current, pointPair) =>
+                                                        (current +
+                                                         TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint)));
 
-            //        var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-            //        var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-            //        if (IsActiveBetween(firstPoint, secondPoint) && IsDescendingBetween(firstPoint, secondPoint))
-            //        {
-            //            decimal? total = 0;
-            //            firstPoint.Duration = total;
-            //            secondPoint.Duration = total + TimeBetween(firstPoint, secondPoint);
-            //            durationTotal += firstPoint.Duration + secondPoint.Duration;
-            //        }
-            //    }
-
-            //}
-
-
-            return durationTotal;
+            return (decimal?)total;
         }
 
         public static decimal? FlatDuration(Activity activity)
         {
+            var pointPairs = PointPairs(activity);
+            var total =
+                pointPairs.Where(
+                    pointPair =>
+                    IsActiveBetween(pointPair.FirstPoint, pointPair.SecondPoint) &&
+                    IsFlatBetween(pointPair.FirstPoint, pointPair.SecondPoint))
+                          .Aggregate<PointPair, double>(0,
+                                                        (current, pointPair) =>
+                                                        (current +
+                                                         TimeBetween(pointPair.FirstPoint, pointPair.SecondPoint)));
 
-            decimal? durationTotal = 0;
+            return (decimal?)total;
+        }
+
+        public static decimal? AveragePace(Activity activity)
+        {
+            if (activity.Points.Count < 2)
+            {
+                foreach (var point in activity.Points)
+                {
+                    point.Pace = 0;
+                }
+                return 0;
+            }
+
+            activity.Points.First().Pace = 0;
 
             var pointPairs = PointPairs(activity);
-            //for (var i = 0; i < pointPairs.Count - 1; i++)
-            //{
-            //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-            //    {
+            foreach (var pointPair in pointPairs)
+            {
+                pointPair.SecondPoint.Pace = (decimal?)(PaceBetween(pointPair.FirstPoint, pointPair.SecondPoint));
+            }
 
-            //        var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-            //        var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
+            var distance = Distance(activity);
+            if (distance == 0)
+                return 0;
 
-            //        if (IsActiveBetween(firstPoint, secondPoint) && IsFlatBetween(firstPoint, secondPoint))
-            //        {
-            //            decimal? total = 0;
-            //            firstPoint.Duration = total;
-            //            secondPoint.Duration = total + TimeBetween(firstPoint, secondPoint);
-            //            durationTotal += firstPoint.Duration + secondPoint.Duration;
-            //        }
-            //    }
+            return ActiveDuration(activity)/distance;
+        }
 
-            //}
+        public static decimal? AverageAscendingPace(Activity activity)
+        {
+            var distance = AscendingDistance(activity);
+            if (distance == 0)
+                return 0;
 
+            return AscendingDuration(activity) / distance;
+        }
 
-            return durationTotal;
+        public static decimal? AverageDescendingPace(Activity activity)
+        {
+            var distance = DescendingDistance(activity);
+            if (distance == 0)
+                return 0;
+
+            return DescendingDuration(activity) / distance;
+        }
+
+        public static decimal? AverageFlatPace(Activity activity)
+        {
+            var distance = FlatDistance(activity);
+            if (distance == 0)
+                return 0;
+
+            return FlatDuration(activity) / distance;
+        }
+
+        public static decimal? AverageSpeed(Activity activity)
+        {
+            if (activity.Points.Count < 2)
+            {
+                foreach (var point in activity.Points)
+                {
+                    point.Speed = 0;
+                }
+                return 0;
+            }
+
+            activity.Points.First().Speed = 0;
+
+            var pointPairs = PointPairs(activity);
+            foreach (var pointPair in pointPairs)
+            {
+                pointPair.SecondPoint.Speed = (decimal?)(SpeedBetween(pointPair.FirstPoint, pointPair.SecondPoint));
+            }
+
+            var duration = ActiveDuration(activity);
+            if (duration == 0)
+                return 0;
+
+            return Distance(activity) / duration;
+        }
+
+        public static decimal? AverageAscendingSpeed(Activity activity)
+        {
+            var duration = AscendingDuration(activity);
+            if (duration == 0)
+                return 0;
+
+            return AscendingDistance(activity) / duration;
+        }
+
+        public static decimal? AverageDescendingSpeed(Activity activity)
+        {
+            var duration = DescendingDuration(activity);
+            if (duration == 0)
+                return 0;
+
+            return DescendingDistance(activity) / duration;
+        }
+
+        public static decimal? AverageFlatSpeed(Activity activity)
+        {
+            var duration = FlatDuration(activity);
+            if (duration == 0)
+                return 0;
+
+            return FlatDistance(activity) / duration;
+        }
+
+        public static decimal? MaximumSpeed(Activity activity)
+        {
+            if (activity.Points.Count < 2)
+            {
+                return 0;
+            }
+            var pointPairs = PointPairs(activity);
+
+            var pairs = pointPairs as IList<PointPair> ?? pointPairs.ToList();
+            var total = pairs.Select(pointPair => SpeedBetween(pointPair.FirstPoint, pointPair.SecondPoint)).Max();
+
+            
+            return (decimal?) total;
+        }
+
+        public static decimal? AverageHeartRate(Activity activity)
+        {
+            var points = activity.Points.Where(p => p.HeartRate != null).ToList();
+            return (decimal?) (points.Any() ? points.Average(p => p.HeartRate) : null);
+        }
+
+        public static int? MaximumHeartRate(Activity activity)
+        {
+            var points = activity.Points.Where(p => p.HeartRate != null).ToList();
+            return points.Any() ? points.Max(p => p.HeartRate) : null;
+        }
+
+        public static decimal? AverageCadence(Activity activity)
+        {
+            var points = activity.Points.Where(p => p.Cadence != null && p.Cadence > 0).ToList();
+            return (decimal?) (points.Any() ? points.Average(p => p.Cadence) : null);
         }
 
         #region Private
-
-       
 
         public static void Each<T>(this IEnumerable<T> ie, Action<T, int> action)
         {
@@ -344,7 +352,7 @@ namespace GpxViewer.Helpers
             foreach (var e in ie) action(e, i++);
         }
 
-        private static List<PointPair> PointPairs(Activity activity)
+        private static IEnumerable<PointPair> PointPairs(Activity activity)
         {
             var points = activity.Points.OrderBy(p => p.Time).ToList();
             var pairs = new List<PointPair>();
@@ -363,76 +371,43 @@ namespace GpxViewer.Helpers
             return pairs;
         }
 
-        private static ArrayList AscendingPointPairs(Activity activity)
+        private static IEnumerable<PointPair> AscendingPointPairs(Activity activity)
         {
-            var pairs = new ArrayList();
-
             var pointPairs = PointPairs(activity);
-            //for (var i = 0; i < pointPairs.Count-1; i++)
-            //{
-            //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-            //    {
-                    
-            //        var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-            //        var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-            //        if (IsAscendingBetween(firstPoint, secondPoint))
-            //        {
-            //            var pair = new ArrayList { firstPoint, secondPoint };
-            //            pairs.Add(pair);
-            //        }
-            //    }
-            //}
-          
-            return pairs;
+            return (from pointPair in pointPairs
+                    where IsAscendingBetween(pointPair.FirstPoint, pointPair.SecondPoint)
+                    select new PointPair
+                               {
+                                   FirstPoint = pointPair.FirstPoint,
+                                   SecondPoint = pointPair.SecondPoint
+                               }).ToList();
         }
 
-        private static ArrayList DescendingPointPairs(Activity activity)
+        private static IEnumerable<PointPair> DescendingPointPairs(Activity activity)
         {
-            var pairs = new ArrayList();
-
             var pointPairs = PointPairs(activity);
-            //for (var i = 0; i < pointPairs.Count - 1; i++)
-            //{
-            //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-            //    {
-
-            //        var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-            //        var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-            //        if (IsDescendingBetween(firstPoint, secondPoint))
-            //        {
-            //            var pair = new ArrayList { firstPoint, secondPoint };
-            //            pairs.Add(pair);
-            //        }
-            //    }
-            //}
-
-            return pairs;
+            return (from pointPair in pointPairs
+                    where IsDescendingBetween(pointPair.FirstPoint, pointPair.SecondPoint)
+                    select new PointPair
+                               {
+                                   FirstPoint = pointPair.FirstPoint,
+                                   SecondPoint = pointPair.SecondPoint
+                               }).ToList();
         }
 
-        private static ArrayList FlatPointPairs(Activity activity)
+        private static IEnumerable<PointPair> FlatPointPairs(Activity activity)
         {
-            var pairs = new ArrayList();
 
             var pointPairs = PointPairs(activity);
-            //for (var i = 0; i < pointPairs.Count - 1; i++)
-            //{
-            //    for (var j = 0; j < ((ArrayList)pointPairs[i]).Count - 1; j++)
-            //    {
-
-            //        var firstPoint = (Point)((ArrayList)pointPairs[i])[j];
-            //        var secondPoint = (Point)((ArrayList)pointPairs[i])[j + 1];
-
-            //        if (IsActiveBetween(firstPoint, secondPoint) && IsFlatBetween(firstPoint, secondPoint))
-            //        {
-            //            var pair = new ArrayList { firstPoint, secondPoint };
-            //            pairs.Add(pair);
-            //        }
-            //    }
-            //}
-
-            return pairs;
+            return (from pointPair in pointPairs
+                    where
+                        IsActiveBetween(pointPair.FirstPoint, pointPair.SecondPoint) &&
+                        IsFlatBetween(pointPair.FirstPoint, pointPair.SecondPoint)
+                    select new PointPair
+                               {
+                                   FirstPoint = pointPair.FirstPoint,
+                                   SecondPoint = pointPair.SecondPoint
+                               }).ToList();
         }
 
         private static double DegreesToRadian(decimal? degrees)
