@@ -171,6 +171,10 @@
     <Compile Include="Migrations\201306141606477_ChangeDecimalPrecisionForPoints.Designer.cs">
       <DependentUpon>201306141606477_ChangeDecimalPrecisionForPoints.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201306171857552_ChangePrecisionForPoint.cs" />
+    <Compile Include="Migrations\201306171857552_ChangePrecisionForPoint.Designer.cs">
+      <DependentUpon>201306171857552_ChangePrecisionForPoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\CadenceProfile.cs" />
@@ -317,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306141606477_ChangeDecimalPrecisionForPoints.resx">
       <DependentUpon>201306141606477_ChangeDecimalPrecisionForPoints.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306171857552_ChangePrecisionForPoint.resx">
+      <DependentUpon>201306171857552_ChangePrecisionForPoint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

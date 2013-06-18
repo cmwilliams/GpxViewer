@@ -61,6 +61,7 @@ namespace GpxViewer.Controllers
 
                         foreach (var activity in activities)
                         {
+                            var a = Statistics.CalculateStatistics(activity);
                             _db.Activities.Add(activity);
                         }
 
