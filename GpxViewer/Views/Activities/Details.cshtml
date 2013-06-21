@@ -47,6 +47,30 @@
                 <dd>
                     @Model.Activity.ElevationGain.FormatElevation() ft
                 </dd>
+                @if (Model.Activity.AverageCadence != null)
+                {
+                    <dt>
+                        <strong>Avg Cadence:</strong>
+                    </dt>
+                    <dd>
+                        @Math.Round((double) Model.Activity.AverageCadence ,0) rpm
+                    </dd>
+                }
+                 @if (Model.Activity.AverageHeartRate != null && Model.Activity.MaximumHeartRate !=null)
+                 {
+                     <dt>
+                         <strong>Avg Heartrate:</strong>
+                     </dt>
+                     <dd>
+                         @Math.Round((double) Model.Activity.AverageHeartRate ,0) bpm
+                     </dd>
+                     <dt>
+                         <strong>Max Heartrate:</strong>
+                     </dt>
+                     <dd>
+                        @Math.Round((double) Model.Activity.MaximumHeartRate ,0) bpm
+                     </dd>
+                 }
             </dl>
             <h4>Distance</h4>
             <dl class="dl-horizontal">

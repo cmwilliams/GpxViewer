@@ -5,6 +5,14 @@ using GpxViewer.Models;
 
 namespace GpxViewer.Helpers
 {
+    public static class NumericExtensions
+    {
+        public static double ToRadians(this double val)
+        {
+            return (Math.PI / 180) * val;
+        }
+    }
+
     public static class Statistics
     {
         public static Activity CalculateStatistics(Activity activity)
@@ -442,11 +450,11 @@ namespace GpxViewer.Helpers
             var fromLatitude = DegreesToRadian(fromPoint.Latitude);
             var toLatitude = DegreesToRadian(toPoint.Latitude);
 
-            var a = Math.Sin(deltaLatitude/2)*Math.Sin(deltaLatitude/2) +
-                    Math.Sin(deltaLongitude/2)*Math.Sin(deltaLongitude/2)*Math.Cos(fromLatitude)*Math.Cos(toLatitude);
+            var a = Math.Sin(deltaLatitude / 2) * Math.Sin(deltaLatitude / 2) +
+                    Math.Sin(deltaLongitude / 2) * Math.Sin(deltaLongitude / 2) * Math.Cos(fromLatitude) * Math.Cos(toLatitude);
 
-            var c = 2*Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            return EarthRadius(fromPoint)*c;
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return EarthRadius(fromPoint) * c;
         }
 
         private static double SpeedBetween(Point startPoint, Point endPoint)
