@@ -27,11 +27,33 @@ namespace GpxViewer.Controllers
             }
 
             var polyline = activity.Points == null ? string.Empty : activity.Points.GetPolyline();
+            var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+
+            var gpxData = (from p in activity.Points
+                           select new
+                                      {
+                                          Duration = p.Duration.FormatTime(),
+                                          Data = new
+                                                     {
+                                                         ele = p.Elevation,
+                                                         speed = p.Speed,
+                                                         distance = p.Distance,
+                                                         cad = p.Cadence,
+                                                         hr = p.HeartRate,
+                                                         time = p.Duration.FormatTime(),
+                                                         lat = p.Latitude,
+                                                         lon = p.Longitude
+                                                     }
+                                      }).ToList();
+
+            var jsonData = oSerializer.Serialize(gpxData);
+
             
             var viewModel = new ActivityDetailViewModel
                 {
                     Activity = activity,
                     Polyline = polyline,
+                    GpxJsonData = jsonData
                 };
 
             return View(viewModel);

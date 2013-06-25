@@ -6,6 +6,7 @@ namespace GpxViewer.ViewModels
     {
         public Activity Activity { get; set; }
         public string Polyline { get; set; }
+        public string GpxJsonData { get; set; }
        
     
     }

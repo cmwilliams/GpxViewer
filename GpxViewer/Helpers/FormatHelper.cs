@@ -61,6 +61,20 @@ namespace GpxViewer.Helpers
             return formattedTime;
         }
 
+        public static string FormatTime(this DateTime? time)
+        {
+            if (time == null)
+                return string.Empty;
+
+            var ts = TimeSpan.Parse(time.ToString());
+            var formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}",
+                                              ts.Hours,
+                                              ts.Minutes,
+                                              ts.Seconds);
+
+            return formattedTime;
+        }
+
         public static string FormatPaceTime(this decimal? time)
         {
             if (time == null)

@@ -17,6 +17,11 @@
     </dl>
 </div>
 <div class="row-fluid">
+    <div class="span12">
+         <div id="chart_div" style="width: 98%; height: 250px;"></div>
+    </div>
+    </div>
+<div class="row-fluid">
     <div class="span6">
 
         <div class="well">
@@ -53,24 +58,24 @@
                         <strong>Avg Cadence:</strong>
                     </dt>
                     <dd>
-                        @Math.Round((double) Model.Activity.AverageCadence ,0) rpm
+                        @Math.Round((double)Model.Activity.AverageCadence, 0) rpm
                     </dd>
                 }
-                 @if (Model.Activity.AverageHeartRate != null && Model.Activity.MaximumHeartRate !=null)
-                 {
-                     <dt>
-                         <strong>Avg Heartrate:</strong>
-                     </dt>
-                     <dd>
-                         @Math.Round((double) Model.Activity.AverageHeartRate ,0) bpm
-                     </dd>
-                     <dt>
-                         <strong>Max Heartrate:</strong>
-                     </dt>
-                     <dd>
-                        @Math.Round((double) Model.Activity.MaximumHeartRate ,0) bpm
-                     </dd>
-                 }
+                @if (Model.Activity.AverageHeartRate != null && Model.Activity.MaximumHeartRate != null)
+                {
+                    <dt>
+                        <strong>Avg Heartrate:</strong>
+                    </dt>
+                    <dd>
+                        @Math.Round((double)Model.Activity.AverageHeartRate, 0) bpm
+                    </dd>
+                    <dt>
+                        <strong>Max Heartrate:</strong>
+                    </dt>
+                    <dd>
+                        @Math.Round((double)Model.Activity.MaximumHeartRate, 0) bpm
+                    </dd>
+                }
             </dl>
             <h4>Distance</h4>
             <dl class="dl-horizontal">
@@ -159,7 +164,7 @@
                     <strong>Min Elevation:</strong>
                 </dt>
                 <dd>
-                    @Model.Activity.MaximumElevation.FormatElevation() ft
+                    @Model.Activity.MinimumElevation.FormatElevation() ft
                 </dd>
                 <dt>
                     <strong>Elevation Change:</strong>
@@ -240,6 +245,43 @@
             <div id="map_canvas" style="height: 500px;"></div>
         </div>
     </div>
+    <div class="span6">
+        <div class="well">
+            <style>
+                .gauge_wrapper {
+                    display: inline-block;
+                    width: 175px;
+                }
+
+                .medium_gauge {
+                    width: 175px;
+                    height: 140px;
+                }
+            </style>
+            <div style="overflow: hidden; text-align: center;">
+                <div class="gauge_wrapper">
+                    <div id="time_gauge" class="medium_gauge"></div>
+                </div>
+                <div class="gauge_wrapper">
+                    <div id="distance_gauge" class="medium_gauge"></div>
+                </div>
+                <div class="gauge_wrapper">
+                    <div id="speed_gauge" class="medium_gauge"></div>
+                </div>
+                <div class="gauge_wrapper">
+                    <div id="cad_gauge" class="medium_gauge"></div>
+                </div>
+                <div class="gauge_wrapper">
+                    <div id="hr_gauge" class="medium_gauge"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="span6">
+        <div class="well">
+          
+        </div>
+    </div>
 </div>
 
 
@@ -285,6 +327,7 @@
 @section scripts
 {
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBHyd80Vb2I1rUaqH5cZb3lRxy8thve_GM&libraries=geometry&sensor=false"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script type="text/javascript">
         var map;
 
@@ -294,6 +337,156 @@
             var mapOptions = { center: gmCenter, zoom: 3, mapTypeId: gmMapType };
             map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
             displayOnMap();
+
+            var gpxData = @Html.Raw(Model.GpxJsonData);
+            
+
+            var chart_data = {elevation: [], speed: [], cadence: [], time: []};
+			
+
+
+            for(var time in gpxData) {
+                chart_data.time.push(gpxData[time].Duration);
+                chart_data.elevation.push(gpxData[time]['Data'].ele);
+                chart_data.speed.push(gpxData[time]['Data'].speed);
+                chart_data.cadence.push(gpxData[time]['Data'].cad);
+            }
+
+            $('#chart_div').highcharts({
+                chart: {zoomType: 'x'},
+                title: {text: ''},
+                subtitle: {text: ''},
+                xAxis: [{
+                    categories: chart_data.time,
+                    labels: {step: 200},
+                }],
+                yAxis: [
+					{ // Primary yAxis
+					    labels: {
+					        formatter: function() {return this.value +'';},
+					        style: {color: '#89A54E'}
+					    },
+					    title: {
+					        text: 'Cadence rpm',
+					        style: {color: '#89A54E'}
+					    },
+					    min: 0,
+					    max: @Model.Activity.Points.Max(p => p.Cadence),
+					    opposite: true
+			
+					}, 
+					{ // Secondary yAxis
+					    gridLineWidth: 0,
+					    title: {
+					        text: 'Elevation',
+					        style: {color: '#CCCCCC'}
+					    },
+					    labels: {
+					        formatter: function(){return this.value +'m';},
+					        style: {color: '#CCCCCC'}
+					    }, 
+					    min: @Model.Activity.MinimumElevation,
+					    max: @Model.Activity.MaximumElevation,
+			
+					}, 
+					{ // Tertiary yAxis
+					    gridLineWidth: 0,
+					    title: {
+					        text: 'Speed km/h',
+					        style: {color: '#36a6d5'}
+					    },
+					    labels: {
+					        formatter: function(){return this.value +'';},
+					        style: {color: '#36a6d5'}
+					    },
+					    min: 0,
+					    max: @Model.Activity.MaximumSpeed,
+					    opposite: false
+					}
+                ],
+                legend: {enabled: false},
+                series: [
+					{
+					    name: 'Elevation',
+					    color: '#CCCCCC',
+					    fillOpacity: 0.1,
+					    type: 'areaspline',
+					    yAxis: 1,
+					    data: chart_data.elevation,
+					    tooltip: {valueSuffix: ' m'},
+					    marker: {enabled: false, states:{hover: {enabled:false}}},
+					    states: {hover: {enabled: false}}
+					}, 
+					{
+					    name: 'Speed',
+					    color: '#36a6d5',
+					    yAxis: 2,
+					    data: chart_data.speed,
+					    marker: {enabled: false, states:{hover: {enabled:false}}},
+					    states: {hover: {enabled: false}},
+					    tooltip: {valueSuffix: ' km/h'}
+			
+					}, 
+					{
+					    name: 'Cadence',
+					    color: '#89A54E',
+					    data: chart_data.cadence,
+					    tooltip: {valueSuffix: ' rpm'},
+					    marker: {enabled: false, states:{hover: {enabled:false}}},
+					    states: {hover: {enabled: false}}
+						
+					},
+					{
+					    name: 'HR',
+					    color: '#FF0000',
+					    data: chart_data.hr,
+					    tooltip: {valueSuffix: ' bpm'},
+					    marker: {enabled: false, states:{hover: {enabled:false}}},
+					    states: {hover: {enabled: false}}
+					}
+                ]
+            });
+         
+
+
+            @*var hr_gauge = new JustGage({ id: "hr_gauge", value: 0, min: 0, max: @Model.Activity.MaximumHeartRate, title: "HR", label: "bpm", formatter: null, gaugeWidthScale: 0.5 });*@
+            var cad_gauge = new JustGage({ id: "cad_gauge", value: 0, min: 0, max: @Model.Activity.Points.Max(p => p.Cadence), title: "Cadence", label: "rpm", formatter: null, gaugeWidthScale: 0.5 });
+            var speed_gauge = new JustGage({ id: "speed_gauge", value: 0, min: 0, max: @Model.Activity.MaximumSpeed.FormatSpeed(), title: "Speed", label: "mph", formatter: null, gaugeWidthScale: 0.5 });
+            
+            var time_gauge = new JustGage({
+                id: "time_gauge",
+                value: 0,
+                min: 0,
+                max: 6391,
+                title: "Time",
+                label: "h:mm:ss",
+                formatter: function(totalSeconds) {
+                    alert(totalSeconds);
+                    var hours = Math.floor(totalSeconds / 3600);
+                    totalSeconds %= 3600;
+                    var minutes = Math.floor(totalSeconds / 60);
+                    var seconds = Math.floor(totalSeconds % 60);
+
+                    if (hours < 10) {
+                        hours = "0" + hours;
+                    }
+                    if (minutes < 10) {
+                        minutes = "0" + minutes;
+                    }
+                    if (seconds < 10) {
+                        seconds = "0" + seconds;
+                    }
+                    var time = hours + ':' + minutes + ':' + seconds;
+                    return time;
+                },
+                gaugeWidthScale: 0.5,
+                levelColorsGradient: false,
+                levelColors: ['#AAAAAA']
+            });
+            var distance_gauge = new JustGage({id: "distance_gauge", value: 0, min: 0, max: @Model.Activity.Distance.FormatDistance(), title: "Distance",  label: "mi", formatter: null, gaugeWidthScale: 0.5,  levelColorsGradient: false, levelColors:['#AAAAAA']}); 
+
+            time_gauge.refresh(@Model.Activity.Points.FirstOrDefault().ActiveDuration);
+
         });
 
         function displayOnMap() {
