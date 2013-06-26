@@ -886,9 +886,10 @@ dd {
   width: 160px;
   overflow: hidden;
   clear: left;
-  text-align: right;
+  text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-left: 10px;
 }
 
 .dl-horizontal dd {

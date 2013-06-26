@@ -229,6 +229,7 @@
 
     </div>
 </div>
+
 <div class="row-fluid">
     <div class="well">
         <div id="elevationChart" style="width: 98%; height: 250px;"></div>
@@ -253,22 +254,35 @@
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script type="text/javascript">
         var map;
-
+        var gpxData;
+        
         $(document).ready(function() {
-            var gmCenter = new google.maps.LatLng(33.7489, -84.3881);
-            var gmMapType = google.maps.MapTypeId.ROADMAP;
+            gpxData = @Html.Raw(Model.GpxJsonData);
+            var gmCenter = new window.google.maps.LatLng(33.7489, -84.3881);
+            var gmMapType = window.google.maps.MapTypeId.ROADMAP;
             var mapOptions = { center: gmCenter, zoom: 3, mapTypeId: gmMapType };
-            map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+            map = new window.google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+            
             displayOnMap();
+            
+            marker = new window.google.maps.Marker({
+                position: getStartLatLon(),
+                map: map
+            });
+            marker.setVisible(true);
 
-            var gpxData = @Html.Raw(Model.GpxJsonData);
+           
             var chartData = { elevation: [], speed: [], cadence: [], time: [] };
-            for (var time in gpxData) {
-                chartData.time.push(gpxData[time].Duration);
-                chartData.elevation.push(gpxData[time]['Data'].ele);
-                chartData.speed.push(gpxData[time]['Data'].speed);
-                chartData.cadence.push(gpxData[time]['Data'].cad);
+            for (var gpx in gpxData) {
+                chartData.time.push(gpxData[gpx].Duration);
+                chartData.elevation.push(gpxData[gpx]['Data'].ele);
+                chartData.speed.push(gpxData[gpx]['Data'].speed);
+                chartData.cadence.push(gpxData[gpx]['Data'].cad);
             }
+            
+          
+          
+
 
             $('#elevationChart').highcharts({
                 chart: { zoomType: 'x' },
@@ -318,7 +332,31 @@
                         max: @Model.Activity.MaximumSpeed.FormatSpeed(),
                         opposite: false
                     }
-                ],
+                ],        
+                tooltip: {
+                    shared: true,
+                    crosshairs: true,
+                    animation: false,
+                    followPointer: false,
+                    shadow: false,
+                    borderWidth: 0,
+                    positioner: function() {
+                        return { x: 0, y: 0 };
+                    },
+                    formatter: function() {
+                        var ll = findIndexByKeyValue(gpxData, 'Duration', this.x);  
+                        var point = gpxData[ll];
+                       
+                        moveMapMarker(point['Data'].lat, point['Data'].lon);
+                        var s = '<b>Time</b>: ' + point['Data'].time+ '  <b>Distance</b>: ' + point['Data'].distance + ' mi ';
+                       
+                        $.each(this.points, function(i, point) {
+                            s += ' <span style="color:' + point.series.color + '; font-weight: bold;">' + point.series.name + '</span>: ' + point.y + '' + point.series.options.tooltip.valueSuffix;
+                           
+                        });
+                       return s;
+                    }
+                },
                 legend: {
                     enabled: true,
                     title: {
@@ -373,9 +411,31 @@
                     }
                 ]
             });
-
+            
+          
 
         });
+
+        function findIndexByKeyValue(obj, key, value)
+        {
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i][key] == value) {
+                    return i;
+                }
+            }
+            return null;
+        }
+
+
+        function getStartLatLon() {
+            var ll = gpxData[0];
+            var point = new window.google.maps.LatLng(ll['Data'].lat, ll['Data'].lon);
+            return point;
+        }
+			
+        function moveMapMarker(lat, lon){
+            marker.setPosition(new window.google.maps.LatLng(lat, lon));
+        }
 
         function displayOnMap() {
             var decodedPath = google.maps.geometry.encoding.decodePath('@Model.Polyline');
