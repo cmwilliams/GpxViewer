@@ -35,9 +35,9 @@ namespace GpxViewer.Controllers
                                           Duration = p.Duration.FormatTime(),
                                           Data = new
                                                      {
-                                                         ele = p.Elevation,
-                                                         speed = p.Speed,
-                                                         distance = p.Distance,
+                                                         ele = p.Elevation.FormatElevation(),
+                                                         speed = p.Speed.FormatSpeed(),
+                                                         distance = p.Distance.FormatDistance(),
                                                          cad = p.Cadence,
                                                          hr = p.HeartRate,
                                                          time = p.Duration.FormatTime(),

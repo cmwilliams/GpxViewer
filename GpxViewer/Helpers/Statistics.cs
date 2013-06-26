@@ -43,7 +43,10 @@ namespace GpxViewer.Helpers
             activity.MaximumSpeed = MaximumSpeed(activity);
             activity.AverageHeartRate = AverageHeartRate(activity);
             activity.MaximumHeartRate = MaximumHeartRate(activity);
+            activity.MinimumHeartRate = MinimumHeartRate(activity);
             activity.AverageCadence = AverageCadence(activity);
+            activity.MinimumCadence = MinimumCadence(activity);
+            activity.MaximumCadence = MaximumCadence(activity);
 
             return activity;
         }
@@ -344,6 +347,24 @@ namespace GpxViewer.Helpers
         {
             var points = activity.Points.Where(p => p.HeartRate != null).ToList();
             return points.Any() ? points.Max(p => p.HeartRate) : null;
+        }
+
+        public static int? MinimumHeartRate(Activity activity)
+        {
+            var points = activity.Points.Where(p => p.HeartRate != null ).ToList();
+            return points.Any() ? points.Min(p => p.HeartRate) : null;
+        }
+
+        public static int? MinimumCadence(Activity activity)
+        {
+            var points = activity.Points.Where(p => p.Cadence != null && p.Cadence > 0).ToList();
+            return points.Any() ? points.Min(p => p.Cadence) : null;
+        }
+
+        public static int? MaximumCadence(Activity activity)
+        {
+            var points = activity.Points.Where(p => p.Cadence != null && p.Cadence > 0).ToList();
+            return points.Any() ? points.Max(p => p.Cadence) : null;
         }
 
         public static decimal? AverageCadence(Activity activity)

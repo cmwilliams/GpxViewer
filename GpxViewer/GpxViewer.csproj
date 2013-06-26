@@ -177,6 +177,10 @@
     <Compile Include="Migrations\201306171857552_ChangePrecisionForPoint.Designer.cs">
       <DependentUpon>201306171857552_ChangePrecisionForPoint.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201306261818050_CadenceAndHeartrate.cs" />
+    <Compile Include="Migrations\201306261818050_CadenceAndHeartrate.Designer.cs">
+      <DependentUpon>201306261818050_CadenceAndHeartrate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\CadenceProfile.cs" />
@@ -328,6 +332,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306171857552_ChangePrecisionForPoint.resx">
       <DependentUpon>201306171857552_ChangePrecisionForPoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306261818050_CadenceAndHeartrate.resx">
+      <DependentUpon>201306261818050_CadenceAndHeartrate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

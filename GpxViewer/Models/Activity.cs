@@ -40,11 +40,16 @@ namespace GpxViewer.Models
         public decimal? MaximumSpeed { get; set; }
 
         public int? MaximumHeartRate { get; set; }
+        public int? MinimumHeartRate { get; set; }
         public decimal? AverageHeartRate { get; set; }
 
         public decimal? AverageCadence { get; set; }
+        public decimal? MinimumCadence { get; set; }
+        public decimal? MaximumCadence { get; set; }
 
         public virtual ICollection<Point> Points { get; set; }
+
+
 
 
     }
