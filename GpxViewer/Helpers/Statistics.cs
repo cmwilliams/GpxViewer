@@ -530,20 +530,30 @@ namespace GpxViewer.Helpers
         {
             return SpeedBetween(startPoint, endPoint) > 0.5;
         }
-        
+
         private static bool IsAscendingBetween(Point startPoint, Point endPoint)
         {
-            return (ElevationBetween(startPoint, endPoint) / (decimal) DistanceBetween(startPoint, endPoint)) > (decimal) 0.003;
+            var e = ElevationBetween(startPoint, endPoint);
+            var t = (decimal) DistanceBetween(startPoint, endPoint);
+
+            return t != 0 && (e/t) > (decimal) 0.003;
         }
 
         private static bool IsDescendingBetween(Point startPoint, Point endPoint)
         {
-            return (ElevationBetween(endPoint, startPoint)/(decimal) DistanceBetween(startPoint, endPoint)) > (decimal) 0.003;
+            var e = ElevationBetween(endPoint, startPoint);
+            var t = (decimal)DistanceBetween(startPoint, endPoint);
+
+            return t != 0 && (e / t) > (decimal)0.003;
         }
 
         private static bool IsFlatBetween(Point startPoint, Point endPoint)
         {
-            return Math.Abs(ElevationBetween(startPoint, endPoint)/(decimal) DistanceBetween(startPoint, endPoint)) <= (decimal) 0.003;
+            var e = ElevationBetween(startPoint, endPoint);
+            var t = (decimal)DistanceBetween(startPoint, endPoint);
+
+            return t != 0 && ((Math.Abs((e / t))) <= (decimal)0.003);
+
         }
 
         #endregion
