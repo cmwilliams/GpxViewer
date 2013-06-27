@@ -26,6 +26,14 @@ namespace GpxViewer.Controllers
                 return HttpNotFound();
             }
 
+            activity.MinimumCadence = activity.MinimumCadence ?? 0;
+            activity.MaximumCadence = activity.MaximumCadence ?? 0;
+            activity.AverageCadence = activity.AverageCadence ?? 0;
+            activity.MinimumHeartRate = activity.MinimumHeartRate ?? 0;
+            activity.MaximumHeartRate = activity.MaximumHeartRate ?? 0;
+            activity.AverageHeartRate = activity.AverageHeartRate ?? 0;
+
+
             var polyline = activity.Points == null ? string.Empty : activity.Points.GetPolyline();
             var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
 
