@@ -73,8 +73,6 @@ namespace GpxViewer.Controllers
         }
 
 
-      
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateActivityViewModel viewModel)
@@ -89,7 +87,7 @@ namespace GpxViewer.Controllers
 
                         foreach (var activity in activities)
                         {
-                            var a = Statistics.CalculateStatistics(activity);
+                            Statistics.CalculateStatistics(activity);
                             _db.Activities.Add(activity);
                         }
 

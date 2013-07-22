@@ -15,19 +15,24 @@
                 <dd>
                     @Model.Activity.Distance.FormatDistance() mi
                 </dd>
-                <dt>
-                    <strong>Time:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.ActiveDuration.FormatTime()
-                </dd>
-
-                <dt>
-                    <strong>Avg Speed:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageSpeed.FormatSpeed() mph
-                </dd>
+                @if (Model.Activity.ActiveDuration > 0)
+                {
+                    <dt>
+                        <strong>Time:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.ActiveDuration.FormatTime()
+                    </dd>
+                }
+                @if (Model.Activity.AverageSpeed > 0)
+                {
+                    <dt>
+                        <strong>Avg Speed:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageSpeed.FormatSpeed() mph
+                    </dd>
+                }
                 <dt>
                     <strong>Elevation Gain:</strong>
                 </dt>
@@ -36,27 +41,36 @@
                 </dd>
                 @if (Model.Activity.AverageCadence != null)
                 {
-                    <dt>
-                        <strong>Avg Cadence:</strong>
-                    </dt>
-                    <dd>
-                        @Math.Round((double)Model.Activity.AverageCadence, 0) rpm
-                    </dd>
+                    if (Model.Activity.AverageCadence > 0)
+                      {
+                          <dt>
+                              <strong>Avg Cadence:</strong>
+                          </dt>
+                          <dd>
+                              @Math.Round((double) Model.Activity.AverageCadence, 0) rpm
+                          </dd>
+                      }
                 }
                 @if (Model.Activity.AverageHeartRate != null && Model.Activity.MaximumHeartRate != null)
                 {
-                    <dt>
-                        <strong>Avg Heartrate:</strong>
-                    </dt>
-                    <dd>
-                        @Math.Round((double)Model.Activity.AverageHeartRate, 0) bpm
-                    </dd>
-                    <dt>
-                        <strong>Max Heartrate:</strong>
-                    </dt>
-                    <dd>
-                        @Math.Round((double)Model.Activity.MaximumHeartRate, 0) bpm
-                    </dd>
+                    if (Model.Activity.AverageHeartRate > 0)
+                    {
+                        <dt>
+                            <strong>Avg Heartrate:</strong>
+                        </dt>
+                        <dd>
+                            @Math.Round((double) Model.Activity.AverageHeartRate, 0) bpm
+                        </dd>
+                    }
+                    if (Model.Activity.MaximumHeartRate > 0)
+                    {
+                        <dt>
+                            <strong>Max Heartrate:</strong>
+                        </dt>
+                        <dd>
+                            @Math.Round((double) Model.Activity.MaximumHeartRate, 0) bpm
+                        </dd>
+                    }
                 }
             </dl>
             <h4>Distance</h4>
@@ -87,48 +101,47 @@
                     @Model.Activity.FlatDistance.FormatDistance() mi
                 </dd>
             </dl>
-            <h4>Duration</h4>
-            <dl class="dl-horizontal">
-                <dt>
-                    <strong>Duration:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.Duration.FormatTime()
-                </dd>
-                <dt>
-                    <strong>Active Duration:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.ActiveDuration.FormatTime()
-                </dd>
-                <dt>
-                    <strong>Asc Duration:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AscendingDuration.FormatTime()
-                </dd>
+            @if (Model.Activity.Duration > 0)
+            {
+                <h4>Duration</h4>
+                <dl class="dl-horizontal">
+                    <dt>
+                        <strong>Duration:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.Duration.FormatTime()
+                    </dd>
+                    <dt>
+                        <strong>Active Duration:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.ActiveDuration.FormatTime()
+                    </dd>
+                    <dt>
+                        <strong>Asc Duration:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AscendingDuration.FormatTime()
+                    </dd>
 
-                <dt>
-                    <strong>Desc Duration:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.DescendingDuration.FormatTime()
-                </dd>
-                <dt>
-                    <strong>Flat Duration:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.FlatDuration.FormatTime()
-                </dd>
-            </dl>
+                    <dt>
+                        <strong>Desc Duration:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.DescendingDuration.FormatTime()
+                    </dd>
+                    <dt>
+                        <strong>Flat Duration:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.FlatDuration.FormatTime()
+                    </dd>
+                </dl>
+            }
         </div>
-
     </div>
-
-
     <div class="span6">
         <div class="well">
-
             <h4>Elevation</h4>
             <dl class="dl-horizontal">
                 <dt>
@@ -163,68 +176,71 @@
                     @Model.Activity.ElevationChange.FormatElevation() ft
                 </dd>
             </dl>
-            <h4>Speed</h4>
-            <dl class="dl-horizontal">
-                <dt>
-                    <strong>Avg Speed:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageSpeed.FormatSpeed() mph
-                </dd>
-                <dt>
-                    <strong>Max Speed:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.MaximumSpeed.FormatSpeed() mph
-                </dd>
-                <dt>
-                    <strong>Avg Asc Speed:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageAscendingSpeed.FormatSpeed() mph
-                </dd>
+            @if (Model.Activity.AverageSpeed > 0)
+            {
+                <h4>Speed</h4>
+                <dl class="dl-horizontal">
+                    <dt>
+                        <strong>Avg Speed:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageSpeed.FormatSpeed() mph
+                    </dd>
+                    <dt>
+                        <strong>Max Speed:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.MaximumSpeed.FormatSpeed() mph
+                    </dd>
+                    <dt>
+                        <strong>Avg Asc Speed:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageAscendingSpeed.FormatSpeed() mph
+                    </dd>
 
-                <dt>
-                    <strong>Avg Desc Speed:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageDescendingSpeed.FormatSpeed() mph
-                </dd>
-                <dt>
-                    <strong>Avg Flat Speed:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageFlatSpeed.FormatSpeed() mph
-                </dd>
-            </dl>
-            <h4>Pace</h4>
-            <dl class="dl-horizontal">
-                <dt>
-                    <strong>Avg Pace:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AveragePace.FormatPace()  min/mi
-                </dd>
-                <dt>
-                    <strong>Avg Asc Pace:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageAscendingPace.FormatPace()  min/mi
-                </dd>
+                    <dt>
+                        <strong>Avg Desc Speed:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageDescendingSpeed.FormatSpeed() mph
+                    </dd>
+                    <dt>
+                        <strong>Avg Flat Speed:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageFlatSpeed.FormatSpeed() mph
+                    </dd>
+                </dl>
+                <h4>Pace</h4>
+                <dl class="dl-horizontal">
+                    <dt>
+                        <strong>Avg Pace:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AveragePace.FormatPace()  min/mi
+                    </dd>
+                    <dt>
+                        <strong>Avg Asc Pace:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageAscendingPace.FormatPace()  min/mi
+                    </dd>
 
-                <dt>
-                    <strong>Avg Desc Pace:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageDescendingPace.FormatPace()  min/mi
-                </dd>
-                <dt>
-                    <strong>Avg Flat Pace:</strong>
-                </dt>
-                <dd>
-                    @Model.Activity.AverageFlatPace.FormatPace()  min/mi
-                </dd>
-            </dl>
+                    <dt>
+                        <strong>Avg Desc Pace:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageDescendingPace.FormatPace()  min/mi
+                    </dd>
+                    <dt>
+                        <strong>Avg Flat Pace:</strong>
+                    </dt>
+                    <dd>
+                        @Model.Activity.AverageFlatPace.FormatPace()  min/mi
+                    </dd>
+                </dl>
+            }
         </div>
 
     </div>
@@ -317,7 +333,7 @@
                         },
                         min: @Model.Activity.MinimumElevation.FormatElevation(),
                         max: @Model.Activity.MaximumElevation.FormatElevation()
-                    },
+                        },
                     {
                         gridLineWidth: 0,
                         title: {
@@ -368,7 +384,7 @@
                             s += ' <span style="color:' + point.series.color + '; font-weight: bold;">' + point.series.name + '</span>: ' + point.y + '' + point.series.options.tooltip.valueSuffix;
                            
                         });
-                       return s;
+                        return s;
                     }
                 },
                 legend: {
@@ -430,29 +446,29 @@
 
         });
 
-        function findIndexByKeyValue(obj, key, value)
-        {
-            for (var i = 0; i < obj.length; i++) {
-                if (obj[i][key] == value) {
-                    return i;
+            function findIndexByKeyValue(obj, key, value)
+            {
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i][key] == value) {
+                        return i;
+                    }
                 }
+                return null;
             }
-            return null;
-        }
 
 
-        function getStartLatLon() {
-            var ll = gpxData[0];
-            var point = new window.google.maps.LatLng(ll['Data'].lat, ll['Data'].lon);
-            return point;
-        }
+            function getStartLatLon() {
+                var ll = gpxData[0];
+                var point = new window.google.maps.LatLng(ll['Data'].lat, ll['Data'].lon);
+                return point;
+            }
 			
-        function moveMapMarker(lat, lon){
-            marker.setPosition(new window.google.maps.LatLng(lat, lon));
-        }
+            function moveMapMarker(lat, lon){
+                marker.setPosition(new window.google.maps.LatLng(lat, lon));
+            }
 
-        function displayOnMap() {
-            var decodedPath = google.maps.geometry.encoding.decodePath('@Model.Polyline');
+            function displayOnMap() {
+                var decodedPath = google.maps.geometry.encoding.decodePath('@Model.Polyline');
             var pathOptions = { path: decodedPath, strokeColor: "#FF0000", strokeOpacity: 0.5, strokeWeight: 5 };
             var trackPath = new google.maps.Polyline(pathOptions);
             trackPath.setMap(map);
@@ -472,4 +488,4 @@
         }
 
     </script>
-    }
+}
